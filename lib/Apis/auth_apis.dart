@@ -21,7 +21,7 @@ class AuthApis {
 
   static Future<dio.Response?> APIlogin(dio.FormData body) async {
     dio.Response res = await formService.postRequest(
-        "https://raxaspread.com/API/api/login", body, null, null);
+        "https://raxaspread.com/API/api/user-login", body, null, null);
     print(res.data);
     print('res.data_________________________________');
     print("URL: HIT");

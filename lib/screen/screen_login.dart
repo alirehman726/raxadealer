@@ -183,7 +183,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
 
       dio.FormData body = dio.FormData.fromMap({
         // "token": appToken,
-        "email": emailController.text,
+        "username": emailController.text,
         "password": passwordController.text
       });
       var res = await AuthApis.APIlogin(body);

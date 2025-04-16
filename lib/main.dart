@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
 
     return ScreenUtilInit(
       child: GetMaterialApp(
-        title: "GG delivery",
+        title: "Raxa Dealer",
         debugShowCheckedModeBanner: false,
         translations: LocaleString(),
         locale: Locale('en', 'US'),
