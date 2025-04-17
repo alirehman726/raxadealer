@@ -27,8 +27,7 @@ class _ScreenDrawerState extends State<ScreenDrawer>
   int _currentIndex = 0;
   final CarouselController _controller = CarouselController();
   final controllerAllProducts = Get.find<ControllerAllproducts>();
-  String? username;
-  String? email;
+
   List<String> imageUrls = [
     "https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80",
     "https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80",
@@ -45,38 +44,91 @@ class _ScreenDrawerState extends State<ScreenDrawer>
     loadUserData();
   }
 
-  List<Map<String, dynamic>> menuItems = [
-    {
-      "icon": Images.DRAWER_1,
-      "title": "Home",
-      "route": () => ScreenDrawer(),
-    },
-    {
-      "icon": Images.DRAWER_2,
-      "title": "Add Order",
-      "route": () => ScreenProduct(),
-    },
-    {
-      "icon": Images.DRAWER_3,
-      "title": "Track Order",
-      "route": () => ScreenViewOrder(),
-    },
-    {
-      "icon": Images.DRAWER_4,
-      "title": "Add Advertisement",
-      "route": () => ScreenAds(),
-    },
-    {
-      "icon": Images.DRAWER_5,
-      "title": "Add Retailer",
-      "route": () => ScreenDealer(),
-    },
-    {
-      "icon": Images.DRAWER_6,
-      "title": "Retailer Sales",
-      "route": () => ScreenReport(),
-    },
-  ];
+  List<Map<String, dynamic>> menuItems = [];
+
+  String? username;
+  String? email;
+  String? user_type;
+  String? user_id;
+
+  Future<void> loadUserData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString('username') ?? 'ADMIN';
+      email = prefs.getString('email') ?? 'example@gmail.com';
+      user_type = prefs.getString('user_type') ?? 'dealer';
+      user_id = prefs.getString('user_id') ?? '0';
+      buildMenuItems();
+    });
+  }
+
+  void buildMenuItems() {
+    menuItems = [
+      {
+        "icon": Images.DRAWER_1,
+        "title": "Home",
+        "route": () => ScreenDrawer(),
+      },
+      {
+        "icon": Images.DRAWER_2,
+        "title": "Add Order",
+        "route": () => ScreenProduct(),
+      },
+      {
+        "icon": Images.DRAWER_3,
+        "title": "Track Order",
+        "route": () => ScreenViewOrder(),
+      },
+      {
+        "icon": Images.DRAWER_4,
+        "title": "Add Advertisement",
+        "route": () => ScreenAds(),
+      },
+      {
+        "icon": Images.DRAWER_5,
+        "title": user_type == "dealer" ? "Add Retailer" : "Add user",
+        "route": () => ScreenDealer(),
+      },
+      {
+        "icon": Images.DRAWER_6,
+        "title": user_type == "dealer" ? "Retailer Sales" : "User Sales",
+        "route": () => ScreenReport(),
+      },
+    ];
+  }
+
+  // List<Map<String, dynamic>> menuItems = [
+  //   {
+  //     "icon": Images.DRAWER_1,
+  //     "title": "Home",
+  //     "route": () => ScreenDrawer(),
+  //   },
+  //   {
+  //     "icon": Images.DRAWER_2,
+  //     "title": "Add Order",
+  //     "route": () => ScreenProduct(),
+  //   },
+  //   {
+  //     "icon": Images.DRAWER_3,
+  //     "title": "Track Order",
+  //     "route": () => ScreenViewOrder(),
+  //   },
+  //   {
+  //     "icon": Images.DRAWER_4,
+  //     "title": "Add Advertisement",
+  //     "route": () => ScreenAds(),
+  //   },
+  //   {
+  //     "icon": Images.DRAWER_5,
+  //    "title": user_type == "dealer" ? "Add Retailer" : "Add user",
+  //     "route": () => ScreenDealer(),
+  //   },
+  //   {
+  //     "icon": Images.DRAWER_6,
+  //     "title": "Retailer Sales",
+  //     "route": () => ScreenReport(),
+  //   },
+  // ];
 
   int selectedIndex = 0;
 
@@ -178,14 +230,6 @@ class _ScreenDrawerState extends State<ScreenDrawer>
     } else {
       throw 'Could not launch $url';
     }
-  }
-
-  Future<void> loadUserData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      username = prefs.getString('username') ?? 'ADMIN';
-      email = prefs.getString('email') ?? 'example@gmail.com';
-    });
   }
 
   @override

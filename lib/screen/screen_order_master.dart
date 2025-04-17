@@ -41,6 +41,58 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
     loadUserData();
   }
 
+  List<Map<String, dynamic>> menuItems = [];
+  String? username;
+  String? email;
+  String? user_type;
+  String? user_id;
+
+  Future<void> loadUserData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString('username') ?? 'ADMIN';
+      email = prefs.getString('email') ?? 'example@gmail.com';
+      user_type = prefs.getString('user_type') ?? 'dealer';
+      user_id = prefs.getString('user_id') ?? '0';
+      buildMenuItems();
+    });
+  }
+
+  void buildMenuItems() {
+    menuItems = [
+      {
+        "icon": Images.DRAWER_1,
+        "title": "Home",
+        "route": () => ScreenDrawer(),
+      },
+      {
+        "icon": Images.DRAWER_2,
+        "title": "Add Order",
+        "route": () => ScreenProduct(),
+      },
+      {
+        "icon": Images.DRAWER_3,
+        "title": "Track Order",
+        "route": () => ScreenViewOrder(),
+      },
+      {
+        "icon": Images.DRAWER_4,
+        "title": "Add Advertisement",
+        "route": () => ScreenAds(),
+      },
+      {
+        "icon": Images.DRAWER_5,
+        "title": user_type == "dealer" ? "Add Retailer" : "Add user",
+        "route": () => ScreenDealer(),
+      },
+      {
+        "icon": Images.DRAWER_6,
+        "title": user_type == "dealer" ? "Retailer Sales" : "User Sales",
+        "route": () => ScreenReport(),
+      },
+    ];
+  }
+
   String selectedValue = "January";
   List<String> options = [
     "January",
@@ -120,38 +172,38 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
     },
   ];
 
-  List<Map<String, dynamic>> menuItems = [
-    {
-      "icon": Images.DRAWER_1,
-      "title": "Home",
-      "route": () => ScreenDrawer(),
-    },
-    {
-      "icon": Images.DRAWER_2,
-      "title": "Add Order",
-      "route": () => ScreenProduct(),
-    },
-    {
-      "icon": Images.DRAWER_3,
-      "title": "Track Order",
-      "route": () => ScreenViewOrder(),
-    },
-    {
-      "icon": Images.DRAWER_4,
-      "title": "Add Advertisement",
-      "route": () => ScreenAds(),
-    },
-    {
-      "icon": Images.DRAWER_5,
-      "title": "Add Retailer",
-      "route": () => ScreenDealer(),
-    },
-    {
-      "icon": Images.DRAWER_6,
-      "title": "Retailer Sales",
-      "route": () => ScreenReport(),
-    },
-  ];
+  // List<Map<String, dynamic>> menuItems = [
+  //   {
+  //     "icon": Images.DRAWER_1,
+  //     "title": "Home",
+  //     "route": () => ScreenDrawer(),
+  //   },
+  //   {
+  //     "icon": Images.DRAWER_2,
+  //     "title": "Add Order",
+  //     "route": () => ScreenProduct(),
+  //   },
+  //   {
+  //     "icon": Images.DRAWER_3,
+  //     "title": "Track Order",
+  //     "route": () => ScreenViewOrder(),
+  //   },
+  //   {
+  //     "icon": Images.DRAWER_4,
+  //     "title": "Add Advertisement",
+  //     "route": () => ScreenAds(),
+  //   },
+  //   {
+  //     "icon": Images.DRAWER_5,
+  //    "title": user_type == "dealer" ? "Add Retailer" : "Add user",
+  //     "route": () => ScreenDealer(),
+  //   },
+  //   {
+  //     "icon": Images.DRAWER_6,
+  //     "title": "Retailer Sales",
+  //     "route": () => ScreenReport(),
+  //   },
+  // ];
 
   int selectedIndex = 0;
   bool isSwitched = false;
@@ -165,17 +217,6 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
       throw 'Could not launch $url';
     }
   }
-
-  Future<void> loadUserData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      username = prefs.getString('username') ?? 'ADMIN';
-      email = prefs.getString('email') ?? 'example@gmail.com';
-    });
-  }
-
-  String? username;
-  String? email;
 
   @override
   Widget build(BuildContext context) {

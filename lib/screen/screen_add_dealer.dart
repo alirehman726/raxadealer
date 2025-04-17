@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:raxaadmin/Apis/auth_apis.dart';
 import 'package:raxaadmin/Controller/controller_AllDealer.dart';
 import 'package:raxaadmin/Widgets/myToasts.dart';
 import 'package:raxaadmin/screen/screen_dealer.dart';
 import 'package:raxaadmin/utils/images.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ScreenAddDealer extends StatefulWidget {
   const ScreenAddDealer({super.key});
@@ -26,7 +28,47 @@ class _ScreenAddDealerState extends State<ScreenAddDealer> {
   TextEditingController mobileController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  List<dynamic> cities = [];
+  String? selectedCity;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCities();
+    loadUserData();
+  }
+
+  String? username;
+  String? email;
+  String? user_type;
+  String? user_id;
+
+  Future<void> loadUserData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString('username') ?? 'ADMIN';
+      email = prefs.getString('email') ?? 'example@gmail.com';
+      user_type = prefs.getString('user_type') ?? 'dealer';
+      user_id = prefs.getString('user_id') ?? '0';
+    });
+  }
+
+  Future<void> fetchCities() async {
+    final response =
+        await http.get(Uri.parse('https://raxaspread.com/API/api/get-city'));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      final List<dynamic> cityList = jsonResponse['data'];
+
+      setState(() {
+        cities = cityList;
+      });
+    } else {
+      print("Failed to load cities");
+    }
+  }
 
   Future<void> doCallAPILogin() async {
     doStartLoader(true);
@@ -37,9 +79,11 @@ class _ScreenAddDealerState extends State<ScreenAddDealer> {
         "email": emailController.text,
         "phone": mobileController.text,
         "address": addressController.text,
-        "username": usernameController.text,
-        "password": "12345678",
-        "type": "dealer",
+        // "username": usernameController.text,
+        "password": passwordController.text,
+        "city": selectedCity,
+        "user_id": user_id,
+        "type": user_type == "dealer" ? "retailer" : "user",
       });
       var res = await AuthApis.addDealerAPI(body);
 
@@ -144,10 +188,21 @@ class _ScreenAddDealerState extends State<ScreenAddDealer> {
               },
             ),
             centerTitle: true,
-            title: Text(
-              "Add new Retailer",
-              style: TextStyle(color: Colors.white),
-            ),
+            // title: Text(
+            //   "Add new Retailer",
+            //   style: TextStyle(color: Colors.white),
+            // ),
+            title: user_type == "dealer"
+                ? Text(
+                    "Add new Retailer",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w400),
+                  )
+                : Text(
+                    "Add new User",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w400),
+                  ),
           ),
         ),
       ),
@@ -231,7 +286,7 @@ class _ScreenAddDealerState extends State<ScreenAddDealer> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Color(0xffe6f8ff),
-                        labelText: "Design Blitz Pvt Ltd.",
+                        labelText: "Enter your Name",
                         // labelStyle: TextStyle(
                         //   fontWeight: FontWeight.bold,
                         //   color: Colors.black87,
@@ -273,7 +328,7 @@ class _ScreenAddDealerState extends State<ScreenAddDealer> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Color(0xffe6f8ff),
-                        labelText: "+91 1234567890",
+                        labelText: "Enter your Mobile Number",
                         // hintStyle: TextStyle(
                         //   fontWeight: FontWeight.bold,
                         //   color: Colors.black87,
@@ -289,6 +344,50 @@ class _ScreenAddDealerState extends State<ScreenAddDealer> {
                             EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                       ),
                     ),
+                    Text(
+                      "City",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff737c80),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+
+                    DropdownButtonFormField<String>(
+                      value: selectedCity,
+                      items: cities.map<DropdownMenuItem<String>>((city) {
+                        return DropdownMenuItem<String>(
+                          value: city['id'].toString(),
+                          child: Text(city['name']),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedCity = value;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Color(0xffe6f8ff),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(3),
+                          borderSide: BorderSide(
+                            color: Colors.grey,
+                            width: 1,
+                          ),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please select a city";
+                        }
+                        return null;
+                      },
+                    ),
+
                     const SizedBox(height: 20),
                     Text(
                       "Address",
@@ -314,8 +413,7 @@ class _ScreenAddDealerState extends State<ScreenAddDealer> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Color(0xffe6f8ff),
-                        labelText:
-                            "Rasana Mota, Near Shiv Temple,Deesa, B.K, Gujrat-385535",
+                        labelText: "Enter your Address",
                         // hintStyle: TextStyle(
                         //   fontWeight: FontWeight.bold,
                         //   color: Colors.black87,
@@ -358,7 +456,7 @@ class _ScreenAddDealerState extends State<ScreenAddDealer> {
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Color(0xffe6f8ff),
-                        labelText: "contact@design-blitz.com",
+                        labelText: "Enter your Email Address",
                         // hintStyle: TextStyle(
                         //   fontWeight: FontWeight.bold,
                         //   color: Colors.black87,
@@ -377,7 +475,7 @@ class _ScreenAddDealerState extends State<ScreenAddDealer> {
 
                     const SizedBox(height: 20),
                     Text(
-                      "Username",
+                      "Password",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -389,18 +487,18 @@ class _ScreenAddDealerState extends State<ScreenAddDealer> {
                       keyboardType: TextInputType.text,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "Please insert valid Username";
+                          return "Please insert valid Password";
                         }
                         if (value.length < 3) {
                           return "Username should be min 3 characters long";
                         }
                         return null;
                       },
-                      controller: usernameController,
+                      controller: passwordController,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Color(0xffe6f8ff),
-                        labelText: "RAXADEAL001",
+                        labelText: "Enter your Password",
                         // hintStyle: TextStyle(
                         //   fontWeight: FontWeight.bold,
                         //   color: Colors.black87,

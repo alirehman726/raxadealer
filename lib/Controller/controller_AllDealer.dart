@@ -22,7 +22,7 @@ class ControllerAllDealer extends GetxController {
     try {
       loading.value = true;
       var request = http.MultipartRequest(
-          'GET', Uri.parse('https://raxaspread.com/API/api/getDealer'));
+          'GET', Uri.parse('https://raxaspread.com/API/api/getRetailer'));
 
       http.Response response =
           await http.Response.fromStream(await request.send());

@@ -10,6 +10,7 @@ import 'package:raxaadmin/Controller/controller_EditDealer.dart';
 import 'package:raxaadmin/Widgets/myToasts.dart';
 import 'package:raxaadmin/screen/screen_dealer.dart';
 import 'package:raxaadmin/utils/images.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ScreenEditDealer extends StatefulWidget {
   final int id;
@@ -39,6 +40,20 @@ class _ScreenEditDealerState extends State<ScreenEditDealer> {
   void initState() {
     super.initState();
     controllerEditDealer.controllerEditDealer(widget.id);
+    loadUserData();
+  }
+
+  String? username;
+  String? email;
+  String? user_type;
+
+  Future<void> loadUserData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString('username') ?? 'ADMIN';
+      email = prefs.getString('email') ?? 'example@gmail.com';
+      user_type = prefs.getString('user_type') ?? 'dealer';
+    });
   }
 
   void toggleEdit() {
@@ -174,10 +189,21 @@ class _ScreenEditDealerState extends State<ScreenEditDealer> {
               },
             ),
             centerTitle: true,
-            title: Text(
-              "Edit Retailer",
-              style: TextStyle(color: Colors.white),
-            ),
+            // title: Text(
+            //   "Edit Retailer",
+            //   style: TextStyle(color: Colors.white),
+            // ),
+            title: user_type == "dealer"
+                ? Text(
+                    "Edit Retailer",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w400),
+                  )
+                : Text(
+                    "Edit User",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w400),
+                  ),
           ),
         ),
       ),

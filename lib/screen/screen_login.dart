@@ -90,15 +90,21 @@ class _ScreenLoginState extends State<ScreenLogin> {
                           controller: emailController,
                           validator: (email) {
                             if (email!.isEmpty) {
-                              return "Please_insert_email_address".tr;
-                            }
-                            if (!RegExp(
-                                    "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                                .hasMatch(email)) {
-                              return "Please_insert_a_valid_email_address".tr;
+                              return "Please enter your username".tr;
                             }
                             return null;
                           },
+                          // validator: (email) {
+                          //   if (email!.isEmpty) {
+                          //     return "Please_insert_email_address".tr;
+                          //   }
+                          //   if (!RegExp(
+                          //           "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                          //       .hasMatch(email)) {
+                          //     return "Please_insert_a_valid_email_address".tr;
+                          //   }
+                          //   return null;
+                          // },
                           decoration: InputDecoration(
                             hintText: "example@gmail.com",
                             hintStyle: TextStyle(fontWeight: FontWeight.bold),
@@ -197,6 +203,9 @@ class _ScreenLoginState extends State<ScreenLogin> {
           sharedPreferences.setString("token", response['token']);
           sharedPreferences.setString("email", response['email']);
           sharedPreferences.setString("username", response['username']);
+          sharedPreferences.setString("user_type", response['user_type']);
+          sharedPreferences.setString(
+              "user_id", int.parse(response['user_id']).toString());
           Get.to(() => ScreenDrawer());
           Fluttertoast.showToast(
             msg: "Login Successfully".toString(),
