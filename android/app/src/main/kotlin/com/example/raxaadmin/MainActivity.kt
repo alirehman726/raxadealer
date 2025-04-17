@@ -1,4 +1,4 @@
-package com.raxadealer
+package com.raxaspread
 
 import io.flutter.embedding.android.FlutterActivity
 

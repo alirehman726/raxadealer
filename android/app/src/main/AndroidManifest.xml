@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.raxadealer">
+    package="com.raxaspread">
     <application
         android:label="Raxa Dealer"
         android:name="${applicationName}"
