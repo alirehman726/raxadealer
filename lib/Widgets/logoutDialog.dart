@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:raxaadmin/screen/screen_login.dart';
+import 'package:raxaadmin/screen/screen_drawer.dart';
 import 'package:raxaadmin/utils/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,8 +29,8 @@ logoutDialog_logout(context) {
             SharedPreferences sharedPreferences =
                 await SharedPreferences.getInstance();
             sharedPreferences.remove("token");
-            sharedPreferences.clear();
-            Get.offAll(() => ScreenLogin());
+            // sharedPreferences.clear();
+            Get.offAll(() => ScreenDrawer());
           },
         ),
         TextButton(

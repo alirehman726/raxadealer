@@ -10,12 +10,8 @@ import 'package:raxaadmin/Apis/auth_apis.dart';
 import 'package:raxaadmin/Controller/controller_allOrder.dart';
 import 'package:raxaadmin/Controller/controller_view_order.dart';
 import 'package:raxaadmin/Widgets/logoutDialog.dart';
-import 'package:raxaadmin/screen/screen_ads.dart';
-import 'package:raxaadmin/screen/screen_dealer.dart';
-import 'package:raxaadmin/screen/screen_drawer.dart';
+import 'package:raxaadmin/screen/screen_menu_item.dart';
 import 'package:raxaadmin/screen/screen_order_master.dart';
-import 'package:raxaadmin/screen/screen_product.dart';
-import 'package:raxaadmin/screen/screen_report.dart';
 import 'package:raxaadmin/utils/color.dart';
 import 'package:raxaadmin/utils/images.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,7 +35,7 @@ class _ScreenViewOrderState extends State<ScreenViewOrder> {
     loadUserData();
   }
 
-  List<Map<String, dynamic>> menuItems = [];
+  late List<Map<String, dynamic>> menuItems;
 
   String? username;
   String? email;
@@ -53,43 +49,14 @@ class _ScreenViewOrderState extends State<ScreenViewOrder> {
       email = prefs.getString('email') ?? 'example@gmail.com';
       user_type = prefs.getString('user_type') ?? 'dealer';
       user_id = prefs.getString('user_id') ?? '0';
-      buildMenuItems();
+      loadMenuItems();
     });
   }
 
-  void buildMenuItems() {
-    menuItems = [
-      {
-        "icon": Images.DRAWER_1,
-        "title": "Home",
-        "route": () => ScreenDrawer(),
-      },
-      {
-        "icon": Images.DRAWER_2,
-        "title": "Add Order",
-        "route": () => ScreenProduct(),
-      },
-      {
-        "icon": Images.DRAWER_3,
-        "title": "Track Order",
-        "route": () => ScreenViewOrder(),
-      },
-      {
-        "icon": Images.DRAWER_4,
-        "title": "Add Advertisement",
-        "route": () => ScreenAds(),
-      },
-      {
-        "icon": Images.DRAWER_5,
-        "title": user_type == "dealer" ? "Add Retailer" : "Add user",
-        "route": () => ScreenDealer(),
-      },
-      {
-        "icon": Images.DRAWER_6,
-        "title": user_type == "dealer" ? "Retailer Sales" : "User Sales",
-        "route": () => ScreenReport(),
-      },
-    ];
+  void loadMenuItems() async {
+    String userType = "dealer"; // ya SharedPreferences se le lo
+    menuItems = await getMenuItems(userType);
+    setState(() {}); // UI update
   }
 
   final List<Map<String, String>> data = [
@@ -98,39 +65,6 @@ class _ScreenViewOrderState extends State<ScreenViewOrder> {
     {"name": "Kiran Patel", "quntity": "20", "sales": "₹2500"},
     {"name": "Bhautik Shah", "quntity": "25", "sales": "₹8000"},
   ];
-
-  // List<Map<String, dynamic>> menuItems = [
-  //   {
-  //     "icon": Images.DRAWER_1,
-  //     "title": "Home",
-  //     "route": () => ScreenDrawer(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_2,
-  //     "title": "Add Order",
-  //     "route": () => ScreenProduct(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_3,
-  //     "title": "Track Order",
-  //     "route": () => ScreenViewOrder(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_4,
-  //     "title": "Add Advertisement",
-  //     "route": () => ScreenAds(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_5,
-  //    "title": user_type == "dealer" ? "Add Retailer" : "Add user",
-  //     "route": () => ScreenDealer(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_6,
-  //     "title": "Retailer Sales",
-  //     "route": () => ScreenReport(),
-  //   },
-  // ];
 
   int selectedIndex = 0;
 

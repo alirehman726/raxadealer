@@ -5,12 +5,9 @@ import 'package:get/get.dart';
 import 'package:raxaadmin/Controller/controller_allProducts.dart';
 import 'package:raxaadmin/Model/ModelAllProducts.dart';
 import 'package:raxaadmin/Widgets/logoutDialog.dart';
-import 'package:raxaadmin/screen/screen_ads.dart';
-import 'package:raxaadmin/screen/screen_dealer.dart';
-import 'package:raxaadmin/screen/screen_product.dart';
+import 'package:raxaadmin/screen/screen_menu_item.dart';
 import 'package:raxaadmin/screen/screen_products_details.dart';
-import 'package:raxaadmin/screen/screen_report.dart';
-import 'package:raxaadmin/screen/screen_view_order.dart';
+import 'package:raxaadmin/screen/userPopup.dart';
 import 'package:raxaadmin/utils/color.dart';
 import 'package:raxaadmin/utils/images.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,99 +33,59 @@ class _ScreenDrawerState extends State<ScreenDrawer>
     "https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80",
   ];
 
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
 
     controllerAllProducts.controllerAllProducts();
     loadUserData();
+    dataGet();
+    // userModel();
   }
 
-  List<Map<String, dynamic>> menuItems = [];
+  String? cityId;
+
+  Future<void> dataGet() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    cityId = prefs.getString('city_id');
+
+    if (cityId == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          builder: (context) => UserFormPopup(),
+        );
+      });
+    } else {}
+  }
+
+  late List<Map<String, dynamic>> menuItems;
 
   String? username;
   String? email;
   String? user_type;
   String? user_id;
-
+  String? token;
   Future<void> loadUserData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    token = prefs.getString('token');
     setState(() {
       username = prefs.getString('username') ?? 'ADMIN';
       email = prefs.getString('email') ?? 'example@gmail.com';
       user_type = prefs.getString('user_type') ?? 'dealer';
       user_id = prefs.getString('user_id') ?? '0';
-      buildMenuItems();
+      loadMenuItems();
     });
   }
 
-  void buildMenuItems() {
-    menuItems = [
-      {
-        "icon": Images.DRAWER_1,
-        "title": "Home",
-        "route": () => ScreenDrawer(),
-      },
-      {
-        "icon": Images.DRAWER_2,
-        "title": "Add Order",
-        "route": () => ScreenProduct(),
-      },
-      {
-        "icon": Images.DRAWER_3,
-        "title": "Track Order",
-        "route": () => ScreenViewOrder(),
-      },
-      {
-        "icon": Images.DRAWER_4,
-        "title": "Add Advertisement",
-        "route": () => ScreenAds(),
-      },
-      {
-        "icon": Images.DRAWER_5,
-        "title": user_type == "dealer" ? "Add Retailer" : "Add user",
-        "route": () => ScreenDealer(),
-      },
-      {
-        "icon": Images.DRAWER_6,
-        "title": user_type == "dealer" ? "Retailer Sales" : "User Sales",
-        "route": () => ScreenReport(),
-      },
-    ];
+  void loadMenuItems() async {
+    String userType = "dealer"; // ya SharedPreferences se le lo
+    menuItems = await getMenuItems(userType);
+    setState(() {}); // UI update
   }
-
-  // List<Map<String, dynamic>> menuItems = [
-  //   {
-  //     "icon": Images.DRAWER_1,
-  //     "title": "Home",
-  //     "route": () => ScreenDrawer(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_2,
-  //     "title": "Add Order",
-  //     "route": () => ScreenProduct(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_3,
-  //     "title": "Track Order",
-  //     "route": () => ScreenViewOrder(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_4,
-  //     "title": "Add Advertisement",
-  //     "route": () => ScreenAds(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_5,
-  //    "title": user_type == "dealer" ? "Add Retailer" : "Add user",
-  //     "route": () => ScreenDealer(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_6,
-  //     "title": "Retailer Sales",
-  //     "route": () => ScreenReport(),
-  //   },
-  // ];
 
   int selectedIndex = 0;
 
@@ -156,69 +113,75 @@ class _ScreenDrawerState extends State<ScreenDrawer>
   }
 
   Widget _buildProductCard(product) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        InkWell(
-          onTap: () {
-            Get.to(() => ScreenProductsDetails(productsId: product['id']));
-          },
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  product['image'].toString(),
-                  // 'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: 120,
-                ),
-              ),
-              Positioned(
-                bottom: -12, // Half container image ke bahar aayega
-                left: 25,
-                right: 25,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 4,
-                        spreadRadius: 1,
-                      ),
-                    ],
+    return Container(
+      decoration: BoxDecoration(
+        color: Color(0xffccf1fe),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          InkWell(
+            onTap: () {
+              Get.to(() => ScreenProductsDetails(productsId: product['id']));
+            },
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    product['image'].toString(),
+                    // 'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: 120,
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  alignment: Alignment.center,
-                  width: 80,
-                  child: Text(
-                    "₹ ${product['price'].toString()}",
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.blue,
+                ),
+                Positioned(
+                  bottom: -12,
+                  left: 25,
+                  right: 25,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 4,
+                          spreadRadius: 1,
+                        ),
+                      ],
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    alignment: Alignment.center,
+                    width: 80,
+                    child: Text(
+                      "₹ ${product['price'].toString()}",
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.blue,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: 20), // Taaki name aur spacing maintain ho
-        Text(
-          product['product_name'].toString(),
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: Color(0xff3C3D86),
+          const SizedBox(height: 20), // Taaki name aur spacing maintain ho
+          Text(
+            product['product_name'].toString(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Color(0xff3C3D86),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -369,37 +332,39 @@ class _ScreenDrawerState extends State<ScreenDrawer>
                 );
               }),
               Spacer(),
-              InkWell(
-                onTap: () {
-                  logoutDialog_logout(context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Image.asset(
-                        Images.DRAWER_7,
-                        height: 23,
-                        width: 23,
-                        color: primaryColor,
-                        // color: isSelected ? Colors.red : Colors.black54,
-                      ),
-                      const SizedBox(width: 20),
-                      Text(
-                        "Logout",
-                        style: TextStyle(
-                          color: Color(0xff3C3D86),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          // color: isSelected ? Colors.red : Colors.black54,
+              token != null
+                  ? InkWell(
+                      onTap: () {
+                        logoutDialog_logout(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Image.asset(
+                              Images.DRAWER_7,
+                              height: 23,
+                              width: 23,
+                              color: primaryColor,
+                              // color: isSelected ? Colors.red : Colors.black54,
+                            ),
+                            const SizedBox(width: 20),
+                            Text(
+                              "Logout",
+                              style: TextStyle(
+                                color: Color(0xff3C3D86),
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                // color: isSelected ? Colors.red : Colors.black54,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
+                    )
+                  : Container(),
               Divider(
                 color: Colors.black,
                 height: 2,
