@@ -58,7 +58,35 @@ class AuthApis {
     }
   }
 
+  static Future<dio.Response?> changePasswordAPI(dio.FormData body) async {
+    dio.Response res = await formService.postRequest(
+        "https://raxaspread.com/API/api/change_password", body, null, null);
+    print(res.data);
+    print('res.data_________________________________');
+    print("URL: HIT");
+    if (res.statusCode! >= 200 && res.statusCode! <= 210) {
+      return res;
+    } else if (res.statusCode! >= 400 && res.statusCode! <= 403) {
+      return null;
+    }
+  }
+
   static Future<dio.Response?> productStatusAPI(dio.FormData body) async {
+    dio.Response res = await formService.postRequest(
+        "https://raxaspread.com/API/api/change-product-status",
+        body,
+        null,
+        null);
+    print(res.data);
+    print('res.data_________________________________');
+    print("URL: HIT");
+    if (res.statusCode! >= 200 && res.statusCode! <= 210) {
+      return res;
+    } else if (res.statusCode! >= 400 && res.statusCode! <= 403) {
+      return null;
+    }
+  }
+  static Future<dio.Response?> orderDataAPI(dio.FormData body) async {
     dio.Response res = await formService.postRequest(
         "https://raxaspread.com/API/api/change-product-status",
         body,

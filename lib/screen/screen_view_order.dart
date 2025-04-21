@@ -530,99 +530,99 @@ class _ScreenViewOrderState extends State<ScreenViewOrder> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            // Get.back();
-                            Get.dialog(
-                              AlertDialog(
-                                title: Text('Are You Sure You Want To change'),
-                                //content: Text("This should not be closed automatically"),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text('Yes'),
-                                    onPressed: () async {
-                                      doCallAPILogin("approve");
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text('No'),
-                                    onPressed: () {
-                                      Get.back();
-                                    },
-                                  )
-                                ],
-                              ),
-                              barrierDismissible: false,
-                            );
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: 130,
-                            padding: EdgeInsets.only(
-                                left: 10, right: 10, top: 10, bottom: 10),
-                            decoration: BoxDecoration(
-                              color: Color(0xff3FCB1C),
-                              borderRadius: BorderRadius.circular(7),
-                            ),
-                            child: Text(
-                              'APPROVE',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            // Get.back();
-                            Get.dialog(
-                              AlertDialog(
-                                title: Text('Are You Sure You Want To change'),
-                                //content: Text("This should not be closed automatically"),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text('Yes'),
-                                    onPressed: () async {
-                                      doCallAPILogin("reject");
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text('No'),
-                                    onPressed: () {
-                                      Get.back();
-                                    },
-                                  )
-                                ],
-                              ),
-                              barrierDismissible: false,
-                            );
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: 130,
-                            padding: EdgeInsets.only(
-                                left: 10, right: 10, top: 10, bottom: 10),
-                            decoration: BoxDecoration(
-                              color: Color(0xffFF8800),
-                              borderRadius: BorderRadius.circular(7),
-                            ),
-                            child: Text(
-                              'REJECT',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     InkWell(
+                    //       onTap: () {
+                    //         // Get.back();
+                    //         Get.dialog(
+                    //           AlertDialog(
+                    //             title: Text('Are You Sure You Want To change'),
+                    //             //content: Text("This should not be closed automatically"),
+                    //             actions: <Widget>[
+                    //               TextButton(
+                    //                 child: Text('Yes'),
+                    //                 onPressed: () async {
+                    //                   doCallAPILogin("approve");
+                    //                 },
+                    //               ),
+                    //               TextButton(
+                    //                 child: Text('No'),
+                    //                 onPressed: () {
+                    //                   Get.back();
+                    //                 },
+                    //               )
+                    //             ],
+                    //           ),
+                    //           barrierDismissible: false,
+                    //         );
+                    //       },
+                    //       child: Container(
+                    //         alignment: Alignment.center,
+                    //         width: 130,
+                    //         padding: EdgeInsets.only(
+                    //             left: 10, right: 10, top: 10, bottom: 10),
+                    //         decoration: BoxDecoration(
+                    //           color: Color(0xff3FCB1C),
+                    //           borderRadius: BorderRadius.circular(7),
+                    //         ),
+                    //         child: Text(
+                    //           'APPROVE',
+                    //           style: TextStyle(
+                    //             fontSize: 10,
+                    //             fontWeight: FontWeight.bold,
+                    //             color: Colors.white,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     InkWell(
+                    //       onTap: () {
+                    //         // Get.back();
+                    //         Get.dialog(
+                    //           AlertDialog(
+                    //             title: Text('Are You Sure You Want To change'),
+                    //             //content: Text("This should not be closed automatically"),
+                    //             actions: <Widget>[
+                    //               TextButton(
+                    //                 child: Text('Yes'),
+                    //                 onPressed: () async {
+                    //                   doCallAPILogin("reject");
+                    //                 },
+                    //               ),
+                    //               TextButton(
+                    //                 child: Text('No'),
+                    //                 onPressed: () {
+                    //                   Get.back();
+                    //                 },
+                    //               )
+                    //             ],
+                    //           ),
+                    //           barrierDismissible: false,
+                    //         );
+                    //       },
+                    //       child: Container(
+                    //         alignment: Alignment.center,
+                    //         width: 130,
+                    //         padding: EdgeInsets.only(
+                    //             left: 10, right: 10, top: 10, bottom: 10),
+                    //         decoration: BoxDecoration(
+                    //           color: Color(0xffFF8800),
+                    //           borderRadius: BorderRadius.circular(7),
+                    //         ),
+                    //         child: Text(
+                    //           'REJECT',
+                    //           style: TextStyle(
+                    //             fontSize: 10,
+                    //             fontWeight: FontWeight.bold,
+                    //             color: Colors.white,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
 
                     const SizedBox(height: 20),
 
@@ -804,35 +804,35 @@ class _ScreenViewOrderState extends State<ScreenViewOrder> {
                             ],
                           ),
                           const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(''),
-                              InkWell(
-                                onTap: () {
-                                  Get.back();
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: 130,
-                                  padding: EdgeInsets.only(
-                                      left: 10, right: 10, top: 10, bottom: 10),
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff67a5fc),
-                                    borderRadius: BorderRadius.circular(7),
-                                  ),
-                                  child: Text(
-                                    'Submit',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //   children: [
+                          //     Text(''),
+                          //     InkWell(
+                          //       onTap: () {
+                          //         Get.back();
+                          //       },
+                          //       child: Container(
+                          //         alignment: Alignment.center,
+                          //         width: 130,
+                          //         padding: EdgeInsets.only(
+                          //             left: 10, right: 10, top: 10, bottom: 10),
+                          //         decoration: BoxDecoration(
+                          //           color: Color(0xff67a5fc),
+                          //           borderRadius: BorderRadius.circular(7),
+                          //         ),
+                          //         child: Text(
+                          //           'Submit',
+                          //           style: TextStyle(
+                          //             fontSize: 10,
+                          //             fontWeight: FontWeight.bold,
+                          //             color: Colors.white,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     )

@@ -21,7 +21,7 @@ class ControllerAllproducts extends GetxController {
       loading.value = true;
 
       var request = http.MultipartRequest(
-          'GET', Uri.parse('https://raxaspread.com/API/api/allproduct'));
+          'GET', Uri.parse('https://raxaspread.com/API/api/activeproduct'));
 
       http.Response response =
           await http.Response.fromStream(await request.send());
@@ -43,9 +43,9 @@ class ControllerAllproducts extends GetxController {
     } catch (e) {
       print("❌ Error fetching products: $e");
     } finally {
-        Future.delayed(Duration(milliseconds: 500), () {
-          loading.value = false; // 🔥 Delay to ensure UI stability
-        });
+      Future.delayed(Duration(milliseconds: 500), () {
+        loading.value = false; // 🔥 Delay to ensure UI stability
+      });
     }
   }
 }

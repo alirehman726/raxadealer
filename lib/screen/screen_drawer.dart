@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:raxaadmin/Controller/controller.ads.dart';
 import 'package:raxaadmin/Controller/controller_allProducts.dart';
 import 'package:raxaadmin/Model/ModelAllProducts.dart';
 import 'package:raxaadmin/Widgets/logoutDialog.dart';
@@ -24,14 +25,7 @@ class _ScreenDrawerState extends State<ScreenDrawer>
   int _currentIndex = 0;
   final CarouselController _controller = CarouselController();
   final controllerAllProducts = Get.find<ControllerAllproducts>();
-
-  List<String> imageUrls = [
-    "https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80",
-    "https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80",
-    "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80",
-    "https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80",
-    "https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80",
-  ];
+  final controllerAds = Get.find<ControllerAds>();
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
@@ -41,6 +35,8 @@ class _ScreenDrawerState extends State<ScreenDrawer>
     super.initState();
 
     controllerAllProducts.controllerAllProducts();
+    controllerAds.controllerAds();
+
     loadUserData();
     dataGet();
     // userModel();
@@ -72,6 +68,7 @@ class _ScreenDrawerState extends State<ScreenDrawer>
   Future<void> loadUserData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     token = prefs.getString('token');
+
     setState(() {
       username = prefs.getString('username') ?? 'ADMIN';
       email = prefs.getString('email') ?? 'example@gmail.com';
@@ -90,9 +87,6 @@ class _ScreenDrawerState extends State<ScreenDrawer>
   int selectedIndex = 0;
 
   Widget _buildProductGrid(RxList<AllProducts> allProducts) {
-    print(allProducts);
-    print('allProducts');
-
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: GridView.builder(
@@ -440,6 +434,58 @@ class _ScreenDrawerState extends State<ScreenDrawer>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 10),
+                        // SizedBox(
+                        //   height: 200,
+                        //   child: ListView(
+                        //     shrinkWrap: true,
+                        //     physics: NeverScrollableScrollPhysics(),
+                        //     children: [
+                        //       CarouselSlider(
+                        //         items: imageUrls.map((imageUrl) {
+                        //           return Container(
+                        //             margin: EdgeInsets.all(6.0),
+                        //             decoration: BoxDecoration(
+                        //               borderRadius: BorderRadius.circular(8.0),
+                        //               image: DecorationImage(
+                        //                 image: NetworkImage(imageUrl),
+                        //                 fit: BoxFit.cover,
+                        //               ),
+                        //             ),
+                        //           );
+                        //         }).toList(),
+                        //         options: CarouselOptions(
+                        //           height: 180.0,
+                        //           enlargeCenterPage: true,
+                        //           autoPlay: true,
+                        //           aspectRatio: 16 / 9,
+                        //           autoPlayCurve: Curves.fastOutSlowIn,
+                        //           enableInfiniteScroll: true,
+                        //           autoPlayAnimationDuration:
+                        //               Duration(milliseconds: 800),
+                        //           viewportFraction: 0.8,
+                        //           onPageChanged: (index, reason) {
+                        //             setState(() {
+                        //               _currentIndex = index;
+                        //             });
+                        //           },
+                        //         ),
+                        //       ),
+                        //       SizedBox(height: 10),
+                        //       Center(
+                        //         child: AnimatedSmoothIndicator(
+                        //           activeIndex: _currentIndex,
+                        //           count: imageUrls.length,
+                        //           effect: ExpandingDotsEffect(
+                        //             dotHeight: 8,
+                        //             dotWidth: 8,
+                        //             activeDotColor: Colors.blue,
+                        //             dotColor: Colors.grey,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         SizedBox(
                           height: 200,
                           child: ListView(
@@ -447,13 +493,14 @@ class _ScreenDrawerState extends State<ScreenDrawer>
                             physics: NeverScrollableScrollPhysics(),
                             children: [
                               CarouselSlider(
-                                items: imageUrls.map((imageUrl) {
+                                items: controllerAds.allAds.map((image) {
+                                  print(controllerAds.allAds[0].ads);
                                   return Container(
                                     margin: EdgeInsets.all(6.0),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8.0),
                                       image: DecorationImage(
-                                        image: NetworkImage(imageUrl),
+                                        image: NetworkImage(image.ads),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -480,7 +527,7 @@ class _ScreenDrawerState extends State<ScreenDrawer>
                               Center(
                                 child: AnimatedSmoothIndicator(
                                   activeIndex: _currentIndex,
-                                  count: imageUrls.length,
+                                  count: controllerAds.allAds.length,
                                   effect: ExpandingDotsEffect(
                                     dotHeight: 8,
                                     dotWidth: 8,
@@ -492,6 +539,7 @@ class _ScreenDrawerState extends State<ScreenDrawer>
                             ],
                           ),
                         ),
+
                         Padding(
                           padding: const EdgeInsets.all(20),
                           child: Column(

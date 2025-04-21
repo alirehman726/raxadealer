@@ -204,6 +204,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
           sharedPreferences.setString("email", response['email']);
           sharedPreferences.setString("username", response['username']);
           sharedPreferences.setString("user_type", response['user_type']);
+          sharedPreferences.setString("login_city", response['city_id']);
           sharedPreferences.setString(
               "user_id", int.parse(response['user_id']).toString());
           Get.to(() => ScreenDrawer());

@@ -6,30 +6,27 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:raxaadmin/Apis/auth_apis.dart';
-import 'package:raxaadmin/Controller/controller_allProducts.dart';
+import 'package:raxaadmin/Controller/controller_AllDealer.dart';
 import 'package:raxaadmin/Widgets/logoutDialog.dart';
+import 'package:raxaadmin/screen/screen_drawer.dart';
 import 'package:raxaadmin/screen/screen_menu_item.dart';
 import 'package:raxaadmin/utils/color.dart';
 import 'package:raxaadmin/utils/images.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../Widgets/myToasts.dart';
-
-class ScreenProduct extends StatefulWidget {
+class ScreenChangepassword extends StatefulWidget {
   @override
-  _ScreenProductState createState() => _ScreenProductState();
+  _ScreenChangepasswordState createState() => _ScreenChangepasswordState();
 }
 
-class _ScreenProductState extends State<ScreenProduct>
+class _ScreenChangepasswordState extends State<ScreenChangepassword>
     with SingleTickerProviderStateMixin {
-  final controllerAllProducts = Get.find<ControllerAllproducts>();
-  TextEditingController searchController = TextEditingController();
-  RxString searchQuery = "".obs;
+  final controllerAllDealer = Get.find<ControllerAllDealer>();
 
-  List<String> gadiLoad = [];
-  List<String> productNames = [];
-  List<String> productIds = [];
+  TextEditingController nameController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  RxString searchQuery = "".obs;
 
   void updateSearchQuery(String query) {
     setState(() {
@@ -40,11 +37,13 @@ class _ScreenProductState extends State<ScreenProduct>
   @override
   void initState() {
     super.initState();
-    controllerAllProducts.controllerAllProducts();
+
+    controllerAllDealer.controllerAllDealer();
     loadUserData();
   }
 
   late List<Map<String, dynamic>> menuItems;
+
   String? username;
   String? email;
   String? user_type;
@@ -67,52 +66,28 @@ class _ScreenProductState extends State<ScreenProduct>
     setState(() {}); // UI update
   }
 
-  int selectedIndex = 0;
-
-  void deleteItem(int id) async {
-    var res = await AuthApis.deleteOrderApi(id);
-
-    if (res != null) {
-      Map<String, dynamic> response = json.decode(res.toString());
-
-      if (response['status'] == true) {
-        // ✅ API Call करके डेटा अपडेट करो
-        await controllerAllProducts.controllerAllProducts();
-
-        // ✅ UI अपडेट करो
-        setState(() {
-          isLoading = false;
-        });
-
-        print("✅ Data refreshed successfully!");
-        // if (controllerAllProducts.controllerAllProducts) {
-        //   Get.back(); // ✅ Model Close
-        // }
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        SnackbarCustom.error("Error", response['message']);
-      }
+  void _launchURL() async {
+    const url =
+        'https://www.design-blitz.com/'; // 👈 Replace with your actual link
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
     } else {
-      throw Exception("No Response from API");
+      throw 'Could not launch $url';
     }
   }
 
-  Future<void> doCallAPILogin(
-      List<String> filteredInputs,
-      List<String> filteredProductNames,
-      List<String> filteredProductIds) async {
+  int selectedIndex = 0;
+  bool isSwitched = false;
+  Future<void> doCallAPILogin() async {
+    doStartLoader(true);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    doStartLoader1(true);
 
     dio.FormData body = dio.FormData.fromMap({
       "user_id": prefs.getString('user_id'),
-      "product_id": filteredProductIds,
-      "product_name": filteredProductNames,
-      "gadi_load": filteredInputs,
+      "new_password": nameController.text,
+      "confrim_password": mobileController.text,
     });
-    var res = await AuthApis.orderDataAPI(body);
+    var res = await AuthApis.changePasswordAPI(body);
 
     if (res != null) {
       Map<String, dynamic> response = json.decode(res.toString());
@@ -127,8 +102,9 @@ class _ScreenProductState extends State<ScreenProduct>
           textColor: Colors.white,
           fontSize: 16.0,
         );
+        Get.offAll(() => ScreenDrawer());
       } else {
-        doStartLoader1(false);
+        doStartLoader(false);
         // SnackbarCustom.error("Error", response['message']);
         Fluttertoast.showToast(
           msg: response['message'].toString(),
@@ -140,7 +116,7 @@ class _ScreenProductState extends State<ScreenProduct>
         );
       }
     } else {
-      doStartLoader1(false);
+      doStartLoader(false);
       Fluttertoast.showToast(
         msg: "Something Error ",
         toastLength: Toast.LENGTH_SHORT,
@@ -149,28 +125,15 @@ class _ScreenProductState extends State<ScreenProduct>
         textColor: Colors.white,
         fontSize: 16.0,
       );
-      // SnackbarCustom.error("Error",
-      //     "Unable_to_login_at_the_moment_Please_try_again_after_sometime");
     }
   }
 
   bool isLoading = false;
-  bool isLoading1 = false;
 
-  doStartLoader1(bool val) {
+  doStartLoader(bool val) {
     setState(() {
-      isLoading1 = val;
+      isLoading = val;
     });
-  }
-
-  void _launchURL() async {
-    const url =
-        'https://www.design-blitz.com/'; // 👈 Replace with your actual link
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 
   @override
@@ -181,7 +144,7 @@ class _ScreenProductState extends State<ScreenProduct>
         centerTitle: true,
         backgroundColor: Color(0xff01B8FA),
         title: Text(
-          "Add Order",
+          "Change Password",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
         ),
         iconTheme: IconThemeData(color: Colors.white),
@@ -259,15 +222,7 @@ class _ScreenProductState extends State<ScreenProduct>
             ...List.generate(menuItems.length, (index) {
               bool isSelected = selectedIndex == index;
               return InkWell(
-                onTap: () {
-                  // setState(() {
-                  //   selectedIndex = index;
-                  //   print(selectedIndex);
-                  //   if (selectedIndex == 7) {
-                  //     logoutDialog_logout(context);
-                  //   }
-                  // });
-                },
+                onTap: () {},
                 child: Container(
                   child: Row(
                     children: [
@@ -292,7 +247,6 @@ class _ScreenProductState extends State<ScreenProduct>
                             height: 23,
                             width: 23,
                             color: primaryColor,
-                            // color: isSelected ? Colors.red : Colors.black54,
                           ),
                           title: Text(
                             menuItems[index]["title"],
@@ -412,235 +366,170 @@ class _ScreenProductState extends State<ScreenProduct>
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(5),
-              color: Color(0xff01B8FA),
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(5),
+            color: Color(0xff01B8FA),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Change Password',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff3C3E89),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: Divider(
+                            color: Color(0xff01B8FA),
+                            height: 2,
+                            thickness: 3,
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(20),
+          ),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(0xffe6f8ff),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              margin: const EdgeInsets.only(
+                  left: 20, right: 20, top: 10, bottom: 10),
+              padding: const EdgeInsets.only(
+                  left: 20, right: 20, top: 10, bottom: 10),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'All Order’s',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff3C3E89),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 100,
-                            child: Divider(
-                              color: Color(0xff01B8FA),
-                              height: 2,
-                              thickness: 3,
-                            ),
-                          )
-                        ],
+                  const SizedBox(height: 10),
+                  Text(
+                    "New Password",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff737c80),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  TextFormField(
+                    obscureText: true,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Please insert valid new password";
+                      }
+                      if (value.length < 3) {
+                        return "Name should be min 3 characters long";
+                      }
+                      return null;
+                    },
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Color(0xffe6f8ff),
+                      labelText: "Enter your New Password",
+                      // labelStyle: TextStyle(
+                      //   fontWeight: FontWeight.bold,
+                      //   color: Colors.black87,
+                      // ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(3),
+                        borderSide: BorderSide(
+                          color: Colors.grey,
+                          width: 1,
+                        ),
                       ),
-                    ],
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    "Confirm Password",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff737c80),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  TextFormField(
+                    obscureText: true,
+                    controller: mobileController,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Please insert valid confirm password";
+                      }
+                      if (value.length < 3) {
+                        return "Name should be min 3 characters long";
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Color(0xffe6f8ff),
+                      labelText: "Enter your Confirm Password",
+                      // hintStyle: TextStyle(
+                      //   fontWeight: FontWeight.bold,
+                      //   color: Colors.black87,
+                      // ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(3),
+                        borderSide: BorderSide(
+                          color: Colors.grey,
+                          width: 1,
+                        ),
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  InkWell(
+                    onTap: () {
+                      doCallAPILogin();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        "Submit",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-            Obx(() {
-              if (controllerAllProducts.loading.value) {
-                return Center(
-                  child: CircularProgressIndicator(color: Colors.red),
-                );
-              }
-
-              var filteredProducts = controllerAllProducts.allProducts
-                  .where((product) => product.productName
-                      .trim()
-                      .toLowerCase()
-                      .contains(searchQuery.value.trim()))
-                  .toList();
-
-              if (filteredProducts.isEmpty) {
-                return Center(
-                  child: Text(
-                    "No order found",
-                    style: TextStyle(color: Colors.red, fontSize: 16),
-                  ),
-                );
-              }
-
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Table(
-                      border: TableBorder.all(color: Colors.black),
-                      columnWidths: const {
-                        0: FlexColumnWidth(1),
-                        1: FlexColumnWidth(1),
-                        2: FlexColumnWidth(1),
-                        3: FlexColumnWidth(1),
-                      },
-                      children: [
-                        // Header
-                        TableRow(
-                          decoration: BoxDecoration(
-                            color: Color(0xff01B8FA),
-                          ),
-                          children: [
-                            _tableHeader("Product Name"),
-                            _tableHeader("Flavore"),
-                            _tableHeader("Gadi Load"),
-                            _tableHeader("Unit Price"),
-                          ],
-                        ),
-
-                        // Product Rows
-                        ...List.generate(filteredProducts.length, (rowIndex) {
-                          var product = filteredProducts[rowIndex];
-                          String productId = product.id.toString();
-                          String productName = product.productName ?? '';
-
-                          // Initialize maps if not present
-                          gadiLoadMap.putIfAbsent(productId, () => '');
-                          productNamesMap.putIfAbsent(
-                              productId, () => productName);
-                          productIdsMap.putIfAbsent(productId, () => productId);
-
-                          return TableRow(
-                            children: [
-                              _tableCell(product.productName ?? ''),
-                              _tableCell(product.flavour?.toString() ?? ''),
-                              Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Center(
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    initialValue: gadiLoadMap[productId],
-                                    onChanged: (value) {
-                                      setState(() {
-                                        gadiLoadMap[productId] = value;
-                                      });
-                                    },
-                                    style: TextStyle(fontSize: 16),
-                                    decoration: InputDecoration(
-                                      isDense: true,
-                                      contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 8),
-                                      border: OutlineInputBorder(),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              _tableCell(product.price?.toString() ?? ''),
-                            ],
-                          );
-                        }),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _actionButton('Cancel', Color(0xffFF8800), () {
-                        Get.back();
-                      }),
-                      _actionButton('Submit', Color(0xff0158FA), () {
-                        // print('User Inputs: ${gadiLoadMap.values.toList()}');
-                        // print(
-                        //     'Product Names: ${productNamesMap.values.toList()}');
-                        // print('Product IDs: ${productIdsMap.values.toList()}');
-                        final filteredEntries = gadiLoadMap.entries
-                            .where((entry) => entry.value.trim().isNotEmpty)
-                            .toList();
-
-                        final filteredInputs =
-                            filteredEntries.map((e) => e.value).toList();
-                        final filteredProductIds =
-                            filteredEntries.map((e) => e.key).toList();
-                        final filteredProductNames = filteredProductIds
-                            .map((id) => productNamesMap[id] ?? '')
-                            .toList();
-
-                        print('User Inputs: $filteredInputs');
-                        print('Product Names: $filteredProductNames');
-                        print('Product IDs: $filteredProductIds');
-
-                        doCallAPILogin(filteredInputs, filteredProductNames,
-                            filteredProductIds);
-                      }),
-                    ],
-                  ),
-                  SizedBox(height: 30),
-                ],
-              );
-            })
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Use Map for better data tracking
-  Map<String, String> gadiLoadMap = {};
-  Map<String, String> productNamesMap = {};
-  Map<String, String> productIdsMap = {};
-
-  // Helpers
-  Widget _tableHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Center(
-        child: Text(
-          title,
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-      ),
-    );
-  }
-
-  Widget _tableCell(String value) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Center(
-        child: Text(
-          value,
-          style: TextStyle(fontSize: 16),
-        ),
-      ),
-    );
-  }
-
-  Widget _actionButton(String label, Color color, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        alignment: Alignment.center,
-        width: 80,
-        padding: EdgeInsets.symmetric(vertical: 15),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
           ),
-        ),
+        ],
       ),
     );
   }
