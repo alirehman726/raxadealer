@@ -106,12 +106,22 @@ class _ScreenProductState extends State<ScreenProduct>
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     doStartLoader1(true);
 
+    print(filteredInputs.join(', '));
+    print(filteredProductNames.join(', '));
+    print(filteredProductIds.join(', '));
+
     dio.FormData body = dio.FormData.fromMap({
       "user_id": prefs.getString('user_id'),
-      "product_id": filteredProductIds,
-      "product_name": filteredProductNames,
-      "gadi_load": filteredInputs,
+      "product_id": filteredProductIds.join(', '),
+      "product_name": filteredProductNames.join(', '),
+      "gadi_load": filteredInputs.join(', '),
     });
+    // dio.FormData body = dio.FormData.fromMap({
+    //   "user_id": prefs.getString('user_id'),
+    //   "product_id": filteredProductIds,
+    //   "product_name": filteredProductNames,
+    //   "gadi_load": filteredInputs,
+    // });
     var res = await AuthApis.orderDataAPI(body);
 
     if (res != null) {

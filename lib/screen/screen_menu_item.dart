@@ -5,7 +5,7 @@ import 'package:raxaadmin/screen/screen_dealer.dart';
 import 'package:raxaadmin/screen/screen_drawer.dart';
 import 'package:raxaadmin/screen/screen_login.dart';
 import 'package:raxaadmin/screen/screen_product.dart';
-import 'package:raxaadmin/screen/screen_view_order.dart';
+import 'package:raxaadmin/screen/screen_trackOrder.dart';
 import 'package:raxaadmin/utils/images.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -46,7 +46,7 @@ Future<List<Map<String, dynamic>>> getMenuItems(String userType) async {
       {
         "icon": Images.DRAWER_3,
         "title": "Track Order",
-        "route": () => ScreenViewOrder(),
+        "route": () => ScreenTrackOrder(),
       },
       {
         "icon": Images.DRAWER_3,

@@ -51,11 +51,11 @@ class ViewOrder {
   });
 
   factory ViewOrder.fromJson(Map<String, dynamic> json) => ViewOrder(
-        id: json["id"],
-        status: json["status"],
-        orderDate: DateTime.parse(json["order_date"]),
-        actionBy: json["action_by"],
-        paymentId: json["payment_id"],
+        id: json["id"] ?? "",
+        status: json["status"] ?? "",
+        orderDate: DateTime.parse(json["order_date"] ?? ""),
+        actionBy: json["action_by"] ?? "",
+        paymentId: json["payment_id"] ?? "",
         order: List<Order>.from(json["order"].map((x) => Order.fromJson(x))),
       );
 

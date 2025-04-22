@@ -86,12 +86,10 @@ class AuthApis {
       return null;
     }
   }
+
   static Future<dio.Response?> orderDataAPI(dio.FormData body) async {
     dio.Response res = await formService.postRequest(
-        "https://raxaspread.com/API/api/change-product-status",
-        body,
-        null,
-        null);
+        "https://raxaspread.com/API/api/store-order", body, null, null);
     print(res.data);
     print('res.data_________________________________');
     print("URL: HIT");

@@ -11,6 +11,7 @@ import 'package:raxaadmin/Controller/controller_OneProducts.dart';
 import 'package:raxaadmin/Controller/controller_allAds.dart';
 import 'package:raxaadmin/Controller/controller_allOrder.dart';
 import 'package:raxaadmin/Controller/controller_allProducts.dart';
+import 'package:raxaadmin/Controller/controller_allTrackorder.dart';
 import 'package:raxaadmin/Controller/controller_dealerReport.dart';
 import 'package:raxaadmin/Controller/controller_retailer.dart';
 import 'package:raxaadmin/Controller/controller_viewAds.dart';
@@ -39,6 +40,7 @@ void main() async {
   Get.put(ControllerEditDealer());
   Get.put(ControllerDealerreport());
   Get.put(ControllerAllRetailer());
+  Get.put(ControllerAllTrack());
   runApp(const MyApp());
 }
 

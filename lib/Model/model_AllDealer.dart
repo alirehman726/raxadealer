@@ -36,6 +36,7 @@ class AllDealer {
   String username;
   String status;
   String colorCode;
+  String profileImage;
 
   AllDealer({
     required this.id,
@@ -43,6 +44,7 @@ class AllDealer {
     required this.username,
     required this.status,
     required this.colorCode,
+    required this.profileImage,
   });
 
   factory AllDealer.fromJson(Map<String, dynamic> json) => AllDealer(
@@ -51,6 +53,7 @@ class AllDealer {
         username: json["username"],
         status: json["status"],
         colorCode: json["color_code"],
+        profileImage: json["profile_image"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -59,5 +62,6 @@ class AllDealer {
         "username": username,
         "status": status,
         "color_code": colorCode,
+        "profile_image": profileImage,
       };
 }

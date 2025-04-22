@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:raxaadmin/Apis/auth_apis.dart';
 import 'package:raxaadmin/Controller/controller_AllDealer.dart';
 import 'package:raxaadmin/Widgets/myToasts.dart';
@@ -71,9 +73,17 @@ class _ScreenAddDealerState extends State<ScreenAddDealer> {
   }
 
   Future<void> doCallAPILogin() async {
+    if (_image == null) {
+      Fluttertoast.showToast(msg: "Please select in image");
+      return;
+    }
     doStartLoader(true);
 
     if (_formKey.currentState!.validate()) {
+      dio.MultipartFile imageFile = await dio.MultipartFile.fromFile(
+        _image!.path,
+        filename: _image!.path.split('/').last,
+      );
       dio.FormData body = dio.FormData.fromMap({
         "name": nameController.text,
         "email": emailController.text,
@@ -84,6 +94,7 @@ class _ScreenAddDealerState extends State<ScreenAddDealer> {
         "city": selectedCity,
         "user_id": user_id,
         "type": user_type == "dealer" ? "retailer" : "user",
+        "profile_image": imageFile,
       });
       var res = await AuthApis.addDealerAPI(body);
 
@@ -146,6 +157,17 @@ class _ScreenAddDealerState extends State<ScreenAddDealer> {
   }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  File? _image;
+  Future<void> _pickImage() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -228,39 +250,84 @@ class _ScreenAddDealerState extends State<ScreenAddDealer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 80,
-                        width: 80,
-                        child: CircleAvatar(
-                          radius: 60,
-                          backgroundColor: (() {
-                            Color randomColor = getRandomColor();
-                            return randomColor.withOpacity(0.5);
-                          })(),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: ClipOval(
-                              child: CircleAvatar(
-                                radius: 50,
-                                backgroundColor: (() {
-                                  Color randomColor = getRandomColor();
-                                  return randomColor;
-                                })(),
-                                child: Text(
-                                  'AD',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                      child: GestureDetector(
+                        onTap: _pickImage,
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 100,
+                          width: 100,
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundColor: (() {
+                              Color randomColor = getRandomColor();
+                              return randomColor.withOpacity(0.5);
+                            })(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: ClipOval(
+                                child: _image != null
+                                    ? Image.file(
+                                        _image!,
+                                        fit: BoxFit.cover,
+                                        width: 100,
+                                        height: 100,
+                                      )
+                                    : CircleAvatar(
+                                        radius: 50,
+                                        backgroundColor: (() {
+                                          Color randomColor = getRandomColor();
+                                          return randomColor;
+                                        })(),
+                                        child: Text(
+                                          'AD',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
                               ),
                             ),
                           ),
                         ),
                       ),
                     ),
+
+                    // Center(
+                    //   child: Container(
+                    //     alignment: Alignment.center,
+                    //     height: 80,
+                    //     width: 80,
+                    //     child: CircleAvatar(
+                    //       radius: 60,
+                    //       backgroundColor: (() {
+                    //         Color randomColor = getRandomColor();
+                    //         return randomColor.withOpacity(0.5);
+                    //       })(),
+                    //       child: Padding(
+                    //         padding: const EdgeInsets.all(8),
+                    //         child: ClipOval(
+                    //           child: CircleAvatar(
+                    //             radius: 50,
+                    //             backgroundColor: (() {
+                    //               Color randomColor = getRandomColor();
+                    //               return randomColor;
+                    //             })(),
+                    //             child: Text(
+                    //               'AD',
+                    //               style: TextStyle(
+                    //                 fontSize: 20,
+                    //                 color: Colors.white,
+                    //                 fontWeight: FontWeight.bold,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     const SizedBox(height: 20),
                     Text(
                       "Name",

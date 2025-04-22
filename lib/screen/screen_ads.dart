@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:raxaadmin/Controller/controller_allAds.dart';
 import 'package:raxaadmin/Widgets/logoutDialog.dart';
+import 'package:raxaadmin/screen/screen_add_ads.dart';
 import 'package:raxaadmin/screen/screen_menu_item.dart';
 import 'package:raxaadmin/screen/screen_view_ads.dart';
 import 'package:raxaadmin/utils/color.dart';
@@ -33,7 +34,6 @@ class _ScreenAdsState extends State<ScreenAds>
   void initState() {
     super.initState();
 
-    controllerAllAds.controllerAllAds();
     loadUserData();
   }
 
@@ -53,6 +53,8 @@ class _ScreenAdsState extends State<ScreenAds>
       user_id = prefs.getString('user_id') ?? '0';
       loadMenuItems();
     });
+
+    controllerAllAds.controllerAllAds(user_id);
   }
 
   void loadMenuItems() async {
@@ -340,7 +342,7 @@ class _ScreenAdsState extends State<ScreenAds>
                       controller: searchController,
                       onChanged: updateSearchQuery,
                       decoration: InputDecoration(
-                        hintText: "Search Product",
+                        hintText: "Search here",
                         hintStyle: TextStyle(color: Colors.white70),
                         border: InputBorder.none,
                       ),
@@ -392,7 +394,7 @@ class _ScreenAdsState extends State<ScreenAds>
                       onTap: () {
                         // Get.to(() => ScreenAddDealer());
                         Get.to(
-                          () => ScreenViewAds(
+                          () => ScreenAddAds(
                             id: controllerAllAds.allAds[0].id,
                             name: controllerAllAds.allAds[0].userName,
                             date: controllerAllAds.allAds[0].date.toString(),
@@ -455,14 +457,6 @@ class _ScreenAdsState extends State<ScreenAds>
                 ),
               );
             }
-            // if (controllerAllAds.allAds.isEmpty) {
-            //   return Center(
-            //     child: Text(
-            //       "No Ads data available",
-            //       style: TextStyle(color: Colors.red, fontSize: 16),
-            //     ),
-            //   );
-            // }
             return Expanded(
               child: Container(
                 decoration: BoxDecoration(

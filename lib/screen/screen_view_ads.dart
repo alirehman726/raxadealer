@@ -8,6 +8,7 @@ import 'package:raxaadmin/Controller/controller_allAds.dart';
 import 'package:raxaadmin/Controller/controller_viewAds.dart';
 import 'package:raxaadmin/screen/screen_ads.dart';
 import 'package:raxaadmin/utils/images.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Widgets/myToasts.dart';
 
@@ -28,6 +29,24 @@ class _ScreenViewAdsState extends State<ScreenViewAds> {
   @override
   void initState() {
     super.initState();
+
+    loadUserData();
+    // controllerViewAds.controllerViewAds(widget.id.toString());
+  }
+
+  String? username;
+  String? email;
+  String? user_type;
+  String? user_id;
+
+  Future<void> loadUserData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString('username') ?? 'ADMIN';
+      email = prefs.getString('email') ?? 'example@gmail.com';
+      user_type = prefs.getString('user_type') ?? 'dealer';
+      user_id = prefs.getString('user_id') ?? '0';
+    });
 
     controllerViewAds.controllerViewAds(widget.id.toString());
   }
@@ -74,7 +93,7 @@ class _ScreenViewAdsState extends State<ScreenViewAds> {
             ),
             centerTitle: true,
             title: Text(
-              "Add advertisement",
+              "View advertisement",
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -100,11 +119,11 @@ class _ScreenViewAdsState extends State<ScreenViewAds> {
                 padding:
                     EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
                 decoration: BoxDecoration(
-                  color: Color(0xff3FCB1C),
+                  color: Colors.red,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  'Add',
+                  'Back',
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
@@ -233,7 +252,7 @@ class _ScreenViewAdsState extends State<ScreenViewAds> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Image.network(
-                            controllerViewAds.viewAds[index].image,
+                            controllerViewAds.viewAds[index].ads,
                             fit: BoxFit.cover,
                           ),
                           // child: Image.asset(
@@ -255,6 +274,7 @@ class _ScreenViewAdsState extends State<ScreenViewAds> {
 
   Future<void> doCallAPILogin(String status) async {
     doStartLoader(true);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     dio.FormData body = dio.FormData.fromMap({
       "ads_id": widget.id,
@@ -282,7 +302,7 @@ class _ScreenViewAdsState extends State<ScreenViewAds> {
 
         final controllerAllAds = Get.find<ControllerAllAds>();
 
-        await controllerAllAds.controllerAllAds();
+        await controllerAllAds.controllerAllAds(prefs.getString('user_id'));
         controllerAllAds.update();
       } else {
         doStartLoader(false);

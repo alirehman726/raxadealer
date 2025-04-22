@@ -2,22 +2,23 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:raxaadmin/Controller/controller_allOrder.dart';
+import 'package:raxaadmin/Controller/controller_allTrackorder.dart';
 import 'package:raxaadmin/Widgets/logoutDialog.dart';
 import 'package:raxaadmin/screen/screen_menu_item.dart';
+import 'package:raxaadmin/screen/screen_view_order.dart';
 import 'package:raxaadmin/utils/color.dart';
 import 'package:raxaadmin/utils/images.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ScreenOrderMaster extends StatefulWidget {
+class ScreenTrackOrder extends StatefulWidget {
   @override
-  _ScreenOrderMasterState createState() => _ScreenOrderMasterState();
+  _ScreenTrackOrderState createState() => _ScreenTrackOrderState();
 }
 
-class _ScreenOrderMasterState extends State<ScreenOrderMaster>
+class _ScreenTrackOrderState extends State<ScreenTrackOrder>
     with SingleTickerProviderStateMixin {
-  final controllerAllOrder = Get.find<ControllerAllOrder>();
+  final controllerAllTrack = Get.find<ControllerAllTrack>();
   TextEditingController searchController = TextEditingController();
   RxString searchQuery = "".obs;
 
@@ -27,15 +28,19 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
     });
   }
 
+  String selectedValue = ""; // Initialize as empty first
+
+  String currentMonth = DateTime.now().month.toString();
+
   @override
   void initState() {
     super.initState();
 
-    controllerAllOrder.controllerAllOrder();
     loadUserData();
   }
 
   late List<Map<String, dynamic>> menuItems;
+
   String? username;
   String? email;
   String? user_type;
@@ -50,6 +55,9 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
       user_id = prefs.getString('user_id') ?? '0';
       loadMenuItems();
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controllerAllTrack.controllerAllTrack(user_id);
+    });
   }
 
   void loadMenuItems() async {
@@ -57,118 +65,6 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
     menuItems = await getMenuItems(userType);
     setState(() {}); // UI update
   }
-
-  String selectedValue = "January";
-  List<String> options = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  ];
-
-  List<Map<String, dynamic>> orderMasterData = [
-    {
-      "name": "Aditya Darji",
-      "date": "DATE : 03/01/2025",
-      "time": "TIME : 03:07 AM",
-      "active": 1,
-    },
-    {
-      "name": "Aditya Darji",
-      "date": "DATE : 03/01/2025",
-      "time": "TIME : 03:07 AM",
-      "active": 0,
-    },
-    {
-      "name": "Jay Darji",
-      "date": "DATE : 03/01/2025",
-      "time": "TIME : 03:07 AM",
-      "active": 1,
-    },
-    {
-      "name": "Pratik Darji",
-      "date": "DATE : 03/01/2025",
-      "time": "TIME : 03:07 AM",
-      "active": 0,
-    },
-    {
-      "name": "Bhautik Darji",
-      "date": "DATE : 03/01/2025",
-      "time": "TIME : 03:07 AM",
-      "active": 0,
-    },
-    {
-      "name": "Smit Darji",
-      "date": "DATE : 03/01/2025",
-      "time": "TIME : 03:07 AM",
-      "active": 1,
-    },
-    {
-      "name": "Smit Darji",
-      "date": "DATE : 03/01/2025",
-      "time": "TIME : 03:07 AM",
-      "active": 1,
-    },
-    {
-      "name": "Bhautik Darji",
-      "date": "DATE : 03/01/2025",
-      "time": "TIME : 03:07 AM",
-      "active": 1,
-    },
-    {
-      "name": "Jay Darji",
-      "date": "DATE : 03/01/2025",
-      "time": "TIME : 03:07 AM",
-      "active": 0,
-    },
-    {
-      "name": "Aditya Darji",
-      "date": "DATE : 03/01/2025",
-      "time": "TIME : 03:07 AM",
-      "active": 0,
-    },
-  ];
-
-  // List<Map<String, dynamic>> menuItems = [
-  //   {
-  //     "icon": Images.DRAWER_1,
-  //     "title": "Home",
-  //     "route": () => ScreenDrawer(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_2,
-  //     "title": "Add Order",
-  //     "route": () => ScreenProduct(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_3,
-  //     "title": "Track Order",
-  //     "route": () => ScreenViewOrder(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_4,
-  //     "title": "Add Advertisement",
-  //     "route": () => ScreenAds(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_5,
-  //    "title": user_type == "dealer" ? "Add Retailer" : "Add user",
-  //     "route": () => ScreenDealer(),
-  //   },
-  //   {
-  //     "icon": Images.DRAWER_6,
-  //     "title": "Retailer Sales",
-  //     "route": () => ScreenReport(),
-  //   },
-  // ];
 
   int selectedIndex = 0;
   bool isSwitched = false;
@@ -191,7 +87,7 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
         centerTitle: true,
         backgroundColor: Color(0xff01B8FA),
         title: Text(
-          "Order Master",
+          "Track Order",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
         ),
         iconTheme: IconThemeData(color: Colors.white),
@@ -479,7 +375,7 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Show All Order',
+                          'Show Track Order',
                           style: TextStyle(
                             fontSize: 20,
                             fontStyle: FontStyle.italic,
@@ -497,88 +393,18 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
                         )
                       ],
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: 120,
-                      height: 40,
-                      padding: EdgeInsets.symmetric(horizontal: 5),
-                      decoration: BoxDecoration(
-                        color: Color(0xff01B8FA),
-                        border: Border.all(
-                            color: Colors.blue, width: 2), // Blue border
-                        borderRadius:
-                            BorderRadius.circular(30), // Rounded corners
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: selectedValue,
-                          items: options.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: TextStyle(
-                                    fontSize: 15, color: Colors.black),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedValue = newValue!;
-                            });
-                          },
-                          icon: Icon(Icons.arrow_drop_down,
-                              color: Colors.black), // Dropdown arrow
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    ),
-                    // InkWell(
-                    //   onTap: () {
-                    //     Get.to(() => ScreenAddDealer());
-                    //   },
-                    //   child: Container(
-                    //     padding: EdgeInsets.all(10),
-                    //     decoration: BoxDecoration(
-                    //       borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    //       color: Color(0xff3C3E89),
-                    //     ),
-                    //     child: Row(
-                    //       children: [
-                    //         Container(
-                    //           decoration: BoxDecoration(
-                    //             borderRadius:
-                    //                 BorderRadius.all(Radius.circular(20.0)),
-                    //             color: Colors.white,
-                    //           ),
-                    //           child: Icon(
-                    //             Icons.add,
-                    //             color: Color(0xff3C3E89),
-                    //             size: 20,
-                    //           ),
-                    //         ),
-                    //         const SizedBox(width: 10),
-                    //         Text(
-                    //           'Show All Order',
-                    //           style:
-                    //               TextStyle(color: Colors.white, fontSize: 11),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // )
                   ],
                 ),
               ],
             ),
           ),
           Obx(() {
-            if (controllerAllOrder.loading.value) {
+            if (controllerAllTrack.loading.value) {
               return Center(
                   child: CircularProgressIndicator(color: Colors.red));
             }
 
-            var filteredProducts = controllerAllOrder.allOrder
+            var filteredProducts = controllerAllTrack.alltrack
                 .where((order) => order.actionBy
                     .trim()
                     .toLowerCase()
@@ -595,7 +421,7 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
               );
             }
 
-            // if (controllerAllOrder.allOrder.isEmpty) {
+            // if (controllerAllTrack.alltrack.isEmpty) {
             //   return Center(
             //     child: Text(
             //       "No product data available",
@@ -614,7 +440,7 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
                 padding: const EdgeInsets.only(
                     left: 20, right: 20, top: 10, bottom: 10),
                 child: ListView.builder(
-                  // itemCount: controllerAllOrder.allOrder.length,
+                  // itemCount: controllerAllTrack.alltrack.length,
                   itemCount: filteredProducts.length,
                   itemBuilder: (context, index) {
                     var allOrder = filteredProducts[index];
@@ -630,8 +456,8 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
                                 child: CircleAvatar(
                                   radius: 60,
                                   backgroundColor: getColorFromHex(
-                                          controllerAllOrder
-                                              .allOrder[index].colorCode)
+                                          controllerAllTrack
+                                              .alltrack[index].colorCode)
                                       .withOpacity(0.5),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8),
@@ -639,11 +465,11 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
                                       child: CircleAvatar(
                                         radius: 50,
                                         backgroundColor: getColorFromHex(
-                                            controllerAllOrder
-                                                .allOrder[index].colorCode),
+                                            controllerAllTrack
+                                                .alltrack[index].colorCode),
                                         child: Text(
-                                          getInitials(controllerAllOrder
-                                              .allOrder[index].actionBy),
+                                          getInitials(controllerAllTrack
+                                              .alltrack[index].actionBy),
                                           style: TextStyle(
                                             fontSize: 20,
                                             color: Colors.white,
@@ -656,43 +482,6 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
                                 ),
                               ),
                             ),
-
-                            // Expanded(
-                            //   flex: 1,
-                            //   child: Container(
-                            //     height: 60,
-                            //     width: 60,
-                            //     child: CircleAvatar(
-                            //       radius: 60,
-                            //       backgroundColor: Color(int.parse(
-                            //               '0xff${controllerAllOrder.allOrder[index].colorCode}'))
-                            //           .withOpacity(0.5),
-
-                            //       child: Padding(
-                            //         padding: const EdgeInsets.all(8),
-                            //         child: ClipOval(
-                            //           child: CircleAvatar(
-                            //             radius: 50,
-                            //             // backgroundColor: getColorFromHex(
-                            //             //     "ERDFFF"), // Full color
-                            //             backgroundColor: Color(int.parse(
-                            //                 '0xff${controllerAllOrder.allOrder[index].colorCode}')), // Full color
-                            //             child: Text(
-                            //               // 'AD',
-                            //               getInitials(allOrder.actionBy),
-                            //               style: TextStyle(
-                            //                 fontSize: 20,
-                            //                 color: Colors.white,
-                            //                 fontWeight: FontWeight.bold,
-                            //               ),
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-
                             Expanded(
                               flex: 2,
                               child: Container(
@@ -710,7 +499,7 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
                                       ),
                                     ),
                                     Text(
-                                      "DATE : ${DateFormat('MM/dd/yyyy').format(controllerAllOrder.allOrder[index].orderDate)}",
+                                      "DATE : ${DateFormat('MM/dd/yyyy').format(controllerAllTrack.alltrack[index].orderDate)}",
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w200,
@@ -718,7 +507,7 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
                                       ),
                                     ),
                                     Text(
-                                      "TIME : ${controllerAllOrder.allOrder[index].time.toString()}",
+                                      "TIME : ${controllerAllTrack.alltrack[index].time.toString()}",
                                       style: TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w200,
@@ -738,9 +527,9 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
                                   children: [
                                     InkWell(
                                       onTap: () {
-                                        // Get.to(() => ScreenViewOrder(
-                                        //     id: controllerAllOrder
-                                        //         .allOrder[index].id));
+                                        Get.to(() => ScreenViewOrder(
+                                            id: controllerAllTrack
+                                                .alltrack[index].id));
                                       },
                                       child: Text(
                                         "View",
@@ -753,7 +542,7 @@ class _ScreenOrderMasterState extends State<ScreenOrderMaster>
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      "${controllerAllOrder.allOrder[index].status.toString()}",
+                                      "${controllerAllTrack.alltrack[index].status.toString()}",
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,

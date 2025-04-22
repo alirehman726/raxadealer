@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:raxaadmin/Model/model_allAds.dart';
+import 'package:raxaadmin/Model/model_trackOrder.dart';
 
-class ControllerAllAds extends GetxController {
-  RxList<AllAds> allAds = <AllAds>[].obs;
+class ControllerAllTrack extends GetxController {
+  RxList<TrackOrder> alltrack = <TrackOrder>[].obs;
   // var table = [].obs;
 
   RxBool loading = false.obs;
@@ -11,24 +11,24 @@ class ControllerAllAds extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // controllerAllAds();
+    // controllerAllTrack();
   }
 
-  controllerAllAds(String? user_Id) async {
+  controllerAllTrack(String? user_id) async {
     try {
       loading.value = true;
       var request = http.MultipartRequest(
           'GET',
           Uri.parse(
-              'https://raxaspread.comz/API/api/getads?user_id=${user_Id}'));
+              'https://raxaspread.com/API/api/getDealerOrder?user_id=$user_id'));
 
       http.Response response =
           await http.Response.fromStream(await request.send());
 
       if (response.statusCode == 200) {
-        print('ALL Ads API Call');
+        print('ALL Track API Call');
         loading.value = false;
-        allAds.value = modelAllAdsFromJson(response.body).data;
+        alltrack.value = modelAllTrackOrderFromJson(response.body).data;
         print(response.body);
       } else {
         print(response.reasonPhrase);

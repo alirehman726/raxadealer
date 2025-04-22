@@ -15,6 +15,9 @@ class ControllerViewAds extends GetxController {
   }
 
   controllerViewAds(String id) async {
+    print(id);
+    print(
+        "user_id_____________user_id_____________user_id_____________user_id_____________user_id_____________user_id_____________");
     try {
       loading.value = true;
       var request = http.MultipartRequest('GET',

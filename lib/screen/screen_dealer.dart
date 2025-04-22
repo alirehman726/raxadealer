@@ -66,6 +66,22 @@ class _ScreenDealerState extends State<ScreenDealer>
     setState(() {}); // UI update
   }
 
+  Widget fallbackAvatar(int index) {
+    var dealer = controllerAllDealer.allDealer[index];
+    return CircleAvatar(
+      radius: 50,
+      backgroundColor: getColorFromHex(dealer.colorCode),
+      child: Text(
+        getInitials(dealer.name),
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
   void _launchURL() async {
     const url =
         'https://www.design-blitz.com/'; // 👈 Replace with your actual link
@@ -507,7 +523,7 @@ class _ScreenDealerState extends State<ScreenDealer>
                       controller: searchController,
                       onChanged: updateSearchQuery,
                       decoration: InputDecoration(
-                        hintText: "Search Product",
+                        hintText: "Search here",
                         hintStyle: TextStyle(color: Colors.white70),
                         border: InputBorder.none,
                       ),
@@ -681,6 +697,41 @@ class _ScreenDealerState extends State<ScreenDealer>
                             // ),
                             Expanded(
                               flex: 1,
+                              // child: Container(
+                              //   height: 60,
+                              //   width: 60,
+                              //   child: CircleAvatar(
+                              //     radius: 60,
+                              //     backgroundColor: getColorFromHex(
+                              //             controllerAllDealer
+                              //                 .allDealer[index].colorCode)
+                              //         .withOpacity(0.5),
+                              //     // backgroundColor: fixedColor.withOpacity(
+                              //     //     0.5), // Fixed color with opacity
+                              //     child: Padding(
+                              //       padding: const EdgeInsets.all(8),
+                              //       child: ClipOval(
+                              //         child: CircleAvatar(
+                              //           radius: 50,
+                              //           backgroundColor: getColorFromHex(
+                              //               controllerAllDealer
+                              //                   .allDealer[index].colorCode),
+                              //           // backgroundColor:
+                              //           //     fixedColor, // Fixed color
+                              //           child: Text(
+                              //             getInitials(dealer.name),
+                              //             // 'AD',
+                              //             style: TextStyle(
+                              //               fontSize: 20,
+                              //               color: Colors.white,
+                              //               fontWeight: FontWeight.bold,
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                               child: Container(
                                 height: 60,
                                 width: 60,
@@ -690,28 +741,31 @@ class _ScreenDealerState extends State<ScreenDealer>
                                           controllerAllDealer
                                               .allDealer[index].colorCode)
                                       .withOpacity(0.5),
-                                  // backgroundColor: fixedColor.withOpacity(
-                                  //     0.5), // Fixed color with opacity
                                   child: Padding(
                                     padding: const EdgeInsets.all(8),
                                     child: ClipOval(
-                                      child: CircleAvatar(
-                                        radius: 50,
-                                        backgroundColor: getColorFromHex(
-                                            controllerAllDealer
-                                                .allDealer[index].colorCode),
-                                        // backgroundColor:
-                                        //     fixedColor, // Fixed color
-                                        child: Text(
-                                          getInitials(dealer.name),
-                                          // 'AD',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
+                                      child: controllerAllDealer
+                                                      .allDealer[index]
+                                                      .profileImage !=
+                                                  null &&
+                                              controllerAllDealer
+                                                  .allDealer[index]
+                                                  .profileImage!
+                                                  .isNotEmpty
+                                          ? Image.network(
+                                              controllerAllDealer
+                                                  .allDealer[index]
+                                                  .profileImage!,
+                                              fit: BoxFit.cover,
+                                              width: 60,
+                                              height: 60,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                // fallback in case image fails to load
+                                                return fallbackAvatar(index);
+                                              },
+                                            )
+                                          : fallbackAvatar(index),
                                     ),
                                   ),
                                 ),
