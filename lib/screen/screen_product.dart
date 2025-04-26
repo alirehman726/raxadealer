@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:raxaadmin/Apis/auth_apis.dart';
 import 'package:raxaadmin/Controller/controller_allProducts.dart';
+import 'package:raxaadmin/Controller/controller_allTrackorder.dart';
 import 'package:raxaadmin/Widgets/logoutDialog.dart';
 import 'package:raxaadmin/screen/screen_menu_item.dart';
+import 'package:raxaadmin/screen/screen_trackOrder.dart';
 import 'package:raxaadmin/utils/color.dart';
 import 'package:raxaadmin/utils/images.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,6 +27,8 @@ class _ScreenProductState extends State<ScreenProduct>
   final controllerAllProducts = Get.find<ControllerAllproducts>();
   TextEditingController searchController = TextEditingController();
   RxString searchQuery = "".obs;
+
+  Map<String, String> amountMap = {};
 
   List<String> gadiLoad = [];
   List<String> productNames = [];
@@ -129,36 +132,45 @@ class _ScreenProductState extends State<ScreenProduct>
       print(response);
       print(response['status']);
       if (response['status'] == true) {
-        Fluttertoast.showToast(
-          msg: response['message'].toString(),
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        // Fluttertoast.showToast(
+        //   msg: response['message'].toString(),
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.CENTER,
+        //   timeInSecForIosWeb: 1,
+        //   textColor: Colors.white,
+        //   fontSize: 16.0,
+        // );
+        SnackbarCustom.success("Success", response['message'].toString());
+
+        Get.offAll(() => ScreenTrackOrder());
+
+        final controllerAllTrack = Get.find<ControllerAllTrack>();
+
+        await controllerAllTrack.controllerAllTrack(prefs.getString('user_id'));
+        controllerAllTrack.update();
       } else {
         doStartLoader1(false);
-        // SnackbarCustom.error("Error", response['message']);
-        Fluttertoast.showToast(
-          msg: response['message'].toString(),
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        SnackbarCustom.error("Error", response['message']);
+        // Fluttertoast.showToast(
+        //   msg: response['message'].toString(),
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.CENTER,
+        //   timeInSecForIosWeb: 1,
+        //   textColor: Colors.white,
+        //   fontSize: 16.0,
+        // );
       }
     } else {
       doStartLoader1(false);
-      Fluttertoast.showToast(
-        msg: "Something Error ",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+      SnackbarCustom.error("Error", "Please fill atlest one");
+      // Fluttertoast.showToast(
+      //   msg: "Something Error ",
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.CENTER,
+      //   timeInSecForIosWeb: 1,
+      //   textColor: Colors.white,
+      //   fontSize: 16.0,
+      // );
       // SnackbarCustom.error("Error",
       //     "Unable_to_login_at_the_moment_Please_try_again_after_sometime");
     }
@@ -500,6 +512,7 @@ class _ScreenProductState extends State<ScreenProduct>
                         1: FlexColumnWidth(1),
                         2: FlexColumnWidth(1),
                         3: FlexColumnWidth(1),
+                        4: FlexColumnWidth(1),
                       },
                       children: [
                         // Header
@@ -511,7 +524,8 @@ class _ScreenProductState extends State<ScreenProduct>
                             _tableHeader("Product Name"),
                             _tableHeader("Flavore"),
                             _tableHeader("Gadi Load"),
-                            _tableHeader("Unit Price"),
+                            _tableHeader("Rate"),
+                            _tableHeader("Amount"),
                           ],
                         ),
 
@@ -526,7 +540,6 @@ class _ScreenProductState extends State<ScreenProduct>
                           productNamesMap.putIfAbsent(
                               productId, () => productName);
                           productIdsMap.putIfAbsent(productId, () => productId);
-
                           return TableRow(
                             children: [
                               _tableCell(product.productName ?? ''),
@@ -540,6 +553,17 @@ class _ScreenProductState extends State<ScreenProduct>
                                     onChanged: (value) {
                                       setState(() {
                                         gadiLoadMap[productId] = value;
+
+                                        double gadiLoad =
+                                            double.tryParse(value) ?? 0.0;
+                                        double price = double.tryParse(
+                                                product.price?.toString() ??
+                                                    '0') ??
+                                            0.0;
+                                        double amount = gadiLoad * price;
+
+                                        amountMap[productId] =
+                                            amount.toStringAsFixed(2);
                                       });
                                     },
                                     style: TextStyle(fontSize: 16),
@@ -553,9 +577,71 @@ class _ScreenProductState extends State<ScreenProduct>
                                 ),
                               ),
                               _tableCell(product.price?.toString() ?? ''),
+                              _tableCell(amountMap[productId] ?? '0'),
                             ],
                           );
+
+                          // return TableRow(
+                          //   children: [
+                          //     _tableCell(product.productName ?? ''),
+                          //     _tableCell(product.flavour?.toString() ?? ''),
+                          //     Padding(
+                          //       padding: const EdgeInsets.all(12.0),
+                          //       child: Center(
+                          //         child: TextFormField(
+                          //           keyboardType: TextInputType.number,
+                          //           initialValue: gadiLoadMap[productId],
+                          //           onChanged: (value) {
+                          //             setState(() {
+                          //               gadiLoadMap[productId] = value;
+                          //             });
+                          //           },
+                          //           style: TextStyle(fontSize: 16),
+                          //           decoration: InputDecoration(
+                          //             isDense: true,
+                          //             contentPadding: EdgeInsets.symmetric(
+                          //                 horizontal: 10, vertical: 8),
+                          //             border: OutlineInputBorder(),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     _tableCell(product.price?.toString() ?? ''),
+                          //     _tableCell(product.price?.toString() ?? ''),
+                          //   ],
+                          // );
                         }),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 15),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(''),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "Total: ",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              "₹ ${calculateTotalAmount().toStringAsFixed(2)}", // ₹ symbol optional
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -600,6 +686,14 @@ class _ScreenProductState extends State<ScreenProduct>
         ),
       ),
     );
+  }
+
+  double calculateTotalAmount() {
+    double total = 0.0;
+    amountMap.forEach((key, value) {
+      total += double.tryParse(value) ?? 0.0;
+    });
+    return total;
   }
 
   // Use Map for better data tracking

@@ -173,8 +173,7 @@ class _ScreenAddProductsState extends State<ScreenAddProducts> {
   //   if (res != null) {
   //     Map<String, dynamic> response = json.decode(res.toString());
   //     print(response);
-  //     print(response['status']);
-  //     print('Hello TVS');
+  //     print(response['status']); 
   //     if (response['status'] == true) {
   //       print('Rehmanali');
   //       print(response['message']);

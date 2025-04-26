@@ -20,7 +20,7 @@ class ControllerAllAds extends GetxController {
       var request = http.MultipartRequest(
           'GET',
           Uri.parse(
-              'https://raxaspread.comz/API/api/getads?user_id=${user_Id}'));
+              'https://raxaspread.com/API/api/getads?user_id=${user_Id}'));
 
       http.Response response =
           await http.Response.fromStream(await request.send());

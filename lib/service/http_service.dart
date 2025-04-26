@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:raxaadmin/service/url.dart';
 import 'package:flutter/foundation.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:raxaadmin/service/url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class HttpService {
@@ -22,8 +22,10 @@ Response emptyRes = Response(
 
 class HttpServiceImpl implements HttpService {
   HttpServiceImpl() {
-    _dio = Dio(BaseOptions(
-        baseUrl: BASE_URL, headers: {'Content-Type': 'application/json'}));
+    _dio = Dio(
+      BaseOptions(
+          baseUrl: "", headers: {'Content-Type': 'application/json'}),
+    );
     initializeInterceptors();
   }
   late Dio _dio;
@@ -119,7 +121,7 @@ class HttpServiceImpl implements HttpService {
 
 class FormServiceImpl {
   FormServiceImpl() {
-    _dio = Dio(BaseOptions(baseUrl: BASE_URL, headers: {
+    _dio = Dio(BaseOptions(baseUrl: "", headers: {
       'Content-Type': 'application/json',
     }));
     initializeInterceptors();
@@ -147,7 +149,7 @@ class FormServiceImpl {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
       if (token != null) {
-        _dio.options = BaseOptions(baseUrl: BASE_URL, headers: {
+        _dio.options = BaseOptions(baseUrl: "", headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${sharedPreferences.getString('token')}'
         });
@@ -171,7 +173,7 @@ class FormServiceImpl {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
       if (token != null) {
-        _dio.options = BaseOptions(baseUrl: BASE_URL, headers: {
+        _dio.options = BaseOptions(baseUrl: "", headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${sharedPreferences.getString('token')}'
         });
@@ -196,7 +198,7 @@ class FormServiceImpl {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
       if (token != null) {
-        _dio.options = BaseOptions(baseUrl: BASE_URL, headers: {
+        _dio.options = BaseOptions(baseUrl: "", headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${sharedPreferences.getString('token')}'
         });
@@ -222,7 +224,7 @@ class FormServiceImpl {
     print(postRequest);
     try {
       if (token != null) {
-        _dio.options = BaseOptions(baseUrl: BASE_URL, headers: {
+        _dio.options = BaseOptions(baseUrl: "", headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${sharedPreferences.getString('token')}'
         });
@@ -254,7 +256,7 @@ class FormServiceImpl {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     try {
       if (token != null) {
-        _dio.options = BaseOptions(baseUrl: BASE_URL, headers: {
+        _dio.options = BaseOptions(baseUrl: "", headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${sharedPreferences.getString('token')}'
         });

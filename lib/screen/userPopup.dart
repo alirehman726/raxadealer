@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,6 +13,7 @@ class UserFormPopup extends StatefulWidget {
 class _UserFormPopupState extends State<UserFormPopup> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
 
   @override
   void initState() {
@@ -151,6 +153,49 @@ class _UserFormPopupState extends State<UserFormPopup> {
                     return null;
                   },
                 ),
+
+                SizedBox(height: 16),
+                Text(
+                  "Mobile Number",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  maxLength: 10,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                  ],
+                  validator: (value) {
+                    if (value!.length != 10) {
+                      return 'Mobile Number must be of 10 digit';
+                    }
+                    return null;
+                  },
+                  controller: mobileController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: "Enter your Number",
+                    // labelStyle: TextStyle(
+                    //   fontWeight: FontWeight.bold,
+                    //   color: Colors.black87,
+                    // ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(3),
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 1,
+                      ),
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  ),
+                ),
               ],
             ),
           ),
@@ -168,6 +213,10 @@ class _UserFormPopupState extends State<UserFormPopup> {
                 );
                 sharedPreferences.setString(
                   "city_id",
+                  selectedCity!,
+                );
+                sharedPreferences.setString(
+                  "mobile_number  ",
                   selectedCity!,
                 );
 

@@ -197,8 +197,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
         processLoadingVal(false);
         Map<String, dynamic> response = json.decode(res.toString());
         print(response);
-        print(response['status']);
-        print('Hello TVS');
+        print(response['status']); 
         if (response['status'] == true) {
           sharedPreferences.setString("token", response['token']);
           sharedPreferences.setString("email", response['email']);

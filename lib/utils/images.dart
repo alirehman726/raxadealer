@@ -4,7 +4,7 @@ class Images {
   // static const String QRCODE_IMAGE = "assets/qr_code.jpeg";
   static const String QRCODE_IMAGE = "assets/qr_code.png";
   static const String CENTER_ICON = "assets/center-icon.png";
-  static const String PROFILE_ICON = "assets/profile.png";
+  static const String PROFILE_ICON = "assets/center-icon.png";
   static const String LOGIN_MAIN_ICON = "assets/center-icon-main.png";
   static const String CENTER_ICON111 = "assets/splash.gif";
   static const String BOTTOM_ICON = "assets/bottom-icon.png";
