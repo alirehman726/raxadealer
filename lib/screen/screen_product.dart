@@ -523,7 +523,7 @@ class _ScreenProductState extends State<ScreenProduct>
                           children: [
                             _tableHeader("Product Name"),
                             _tableHeader("Flavore"),
-                            _tableHeader("Gadi Load"),
+                            _tableHeader("Qty"),
                             _tableHeader("Rate"),
                             _tableHeader("Amount"),
                           ],

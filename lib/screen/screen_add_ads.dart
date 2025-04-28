@@ -37,13 +37,55 @@ class _ScreenAddAdsState extends State<ScreenAddAds> {
 
   List<File?> selectedImages = List.filled(5, null); // For 5 image slots
 
+  // Future<void> pickImage(int index) async {
+  //   final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   if (picked != null) {
+  //     setState(() {
+  //       selectedImages[index] = File(picked.path);
+  //     });
+  //   }
+  // }
+
   Future<void> pickImage(int index) async {
-    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (picked != null) {
-      setState(() {
-        selectedImages[index] = File(picked.path);
-      });
-    }
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Gallery'),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  final picked = await ImagePicker()
+                      .pickImage(source: ImageSource.gallery);
+                  if (picked != null) {
+                    setState(() {
+                      selectedImages[index] = File(picked.path);
+                    });
+                  }
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_camera),
+                title: Text('Camera'),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  final picked =
+                      await ImagePicker().pickImage(source: ImageSource.camera);
+                  if (picked != null) {
+                    setState(() {
+                      selectedImages[index] = File(picked.path);
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   String? username;
@@ -409,7 +451,7 @@ class _ScreenAddAdsState extends State<ScreenAddAds> {
     if (res != null) {
       Map<String, dynamic> response = json.decode(res.toString());
       print(response);
-      print(response['status']); 
+      print(response['status']);
       if (response['status'] == true) {
         print('Rehmanali');
         print(response['message']);

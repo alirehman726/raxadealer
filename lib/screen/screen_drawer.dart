@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:raxaadmin/Controller/controller.ads.dart';
 import 'package:raxaadmin/Controller/controller_allProducts.dart';
@@ -191,394 +194,405 @@ class _ScreenDrawerState extends State<ScreenDrawer>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text("Raxa Spread pvt Ltd"),
+    return WillPopScope(
+      onWillPop: () async {
+        if (Platform.isAndroid) {
+          SystemNavigator.pop();
+        } else if (Platform.isIOS) {
+          exit(0);
+        }
+        return false;
+      },
+      child: Scaffold(
           backgroundColor: Colors.white,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.notifications_none,
-              ),
-            )
-          ],
-        ),
-        drawer: Drawer(
-          backgroundColor: Colors.white,
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(bottom: 20, left: 10),
-                height: 120,
-                width: double.infinity,
-                color: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          Images.PROFILE_ICON,
-                          height: 60,
-                          width: 60,
-                          fit: BoxFit.contain,
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Text(
-                                username ?? '',
-                                // 'ADMIN',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              email ?? '',
-                              // 'example@gmail.com',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text("Raxa Spread pvt Ltd"),
+            backgroundColor: Colors.white,
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.notifications_none,
                 ),
-              ),
-              Divider(
-                color: Colors.black,
-                height: 2,
-              ),
-              const SizedBox(height: 20),
-              ...List.generate(menuItems.length, (index) {
-                bool isSelected = selectedIndex == index;
-                return InkWell(
-                  onTap: () {
-                    // setState(() {
-                    //   selectedIndex = index;
-                    //   print(selectedIndex);
-                    //   if (selectedIndex == 7) {
-                    //     logoutDialog_logout(context);
-                    //   }
-                    // });
-                  },
-                  child: Container(
-                    child: Row(
-                      children: [
-                        AnimatedContainer(
-                          duration: Duration(milliseconds: 300),
-                          width: 5,
-                          height: 35,
-                          decoration: BoxDecoration(
-                            // color: isSelected ? Colors.red : Colors.transparent,
-                            borderRadius: BorderRadius.circular(20),
+              )
+            ],
+          ),
+          drawer: Drawer(
+            backgroundColor: Colors.white,
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(bottom: 20, left: 10),
+                  height: 120,
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Spacer(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            Images.PROFILE_ICON,
+                            height: 60,
+                            width: 60,
+                            fit: BoxFit.contain,
                           ),
-                        ),
-                        Expanded(
-                          child: ListTile(
-                            onTap: () {
-                              print(menuItems[index]["route"]());
-                              print('Rehmanali');
-                              Get.to(menuItems[index]["route"]());
-                            },
-                            leading: Image.asset(
-                              menuItems[index]["icon"],
-                              height: 23,
-                              width: 23,
-                              color: primaryColor,
-                              // color: isSelected ? Colors.red : Colors.black54,
-                            ),
-                            title: Text(
-                              menuItems[index]["title"],
-                              style: TextStyle(
-                                color: Color(0xff3C3D86),
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                // color: isSelected ? Colors.red : Colors.black54,
-                              ),
-                            ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              color: gradient2,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-              Spacer(),
-              token != null
-                  ? InkWell(
-                      onTap: () {
-                        logoutDialog_logout(context);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              Images.DRAWER_7,
-                              height: 23,
-                              width: 23,
-                              color: primaryColor,
-                              // color: isSelected ? Colors.red : Colors.black54,
-                            ),
-                            const SizedBox(width: 20),
-                            Text(
-                              "Logout",
-                              style: TextStyle(
-                                color: Color(0xff3C3D86),
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                // color: isSelected ? Colors.red : Colors.black54,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  : Container(),
-              Divider(
-                color: Colors.black,
-                height: 2,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.black,
-                            ),
+                          const SizedBox(width: 10),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const TextSpan(
-                                text: 'All Right Reserved By ',
-                                style: TextStyle(
-                                  color: Color(0xFF3C3C90), // Dark purple-ish
-                                  fontWeight: FontWeight.w700,
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Text(
+                                  username ?? '',
+                                  // 'ADMIN',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w800,
+                                  ),
                                 ),
                               ),
-                              TextSpan(
-                                text: 'Design-blitz',
-                                style: const TextStyle(
-                                  color: Colors
-                                      .lightBlueAccent, // Light blue clickable
-                                  fontWeight: FontWeight.w600,
+                              Text(
+                                email ?? '',
+                                // 'example@gmail.com',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
                                 ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = _launchURL,
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
-                        ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Divider(
+                  color: Colors.black,
+                  height: 2,
+                ),
+                const SizedBox(height: 20),
+                ...List.generate(menuItems.length, (index) {
+                  bool isSelected = selectedIndex == index;
+                  return InkWell(
+                    onTap: () {
+                      // setState(() {
+                      //   selectedIndex = index;
+                      //   print(selectedIndex);
+                      //   if (selectedIndex == 7) {
+                      //     logoutDialog_logout(context);
+                      //   }
+                      // });
+                    },
+                    child: Container(
+                      child: Row(
                         children: [
-                          const TextSpan(
-                            text: 'App Version : 1.0',
-                            style: TextStyle(
-                              color: Color(0xFF3C3C90), // Dark purple-ish
-                              fontWeight: FontWeight.w400,
+                          AnimatedContainer(
+                            duration: Duration(milliseconds: 300),
+                            width: 5,
+                            height: 35,
+                            decoration: BoxDecoration(
+                              // color: isSelected ? Colors.red : Colors.transparent,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              onTap: () {
+                                print(menuItems[index]["route"]());
+                                print('Rehmanali');
+                                Get.to(menuItems[index]["route"]());
+                              },
+                              leading: Image.asset(
+                                menuItems[index]["icon"],
+                                height: 23,
+                                width: 23,
+                                color: primaryColor,
+                                // color: isSelected ? Colors.red : Colors.black54,
+                              ),
+                              title: Text(
+                                menuItems[index]["title"],
+                                style: TextStyle(
+                                  color: Color(0xff3C3D86),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  // color: isSelected ? Colors.red : Colors.black54,
+                                ),
+                              ),
+                              trailing: Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: gradient2,
+                                size: 20,
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        body: Obx(
-          () => controllerAllProducts.loading.value
-              ? Center(child: CircularProgressIndicator(color: Colors.red))
-              : SingleChildScrollView(
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10),
-                        // SizedBox(
-                        //   height: 200,
-                        //   child: ListView(
-                        //     shrinkWrap: true,
-                        //     physics: NeverScrollableScrollPhysics(),
-                        //     children: [
-                        //       CarouselSlider(
-                        //         items: imageUrls.map((imageUrl) {
-                        //           return Container(
-                        //             margin: EdgeInsets.all(6.0),
-                        //             decoration: BoxDecoration(
-                        //               borderRadius: BorderRadius.circular(8.0),
-                        //               image: DecorationImage(
-                        //                 image: NetworkImage(imageUrl),
-                        //                 fit: BoxFit.cover,
-                        //               ),
-                        //             ),
-                        //           );
-                        //         }).toList(),
-                        //         options: CarouselOptions(
-                        //           height: 180.0,
-                        //           enlargeCenterPage: true,
-                        //           autoPlay: true,
-                        //           aspectRatio: 16 / 9,
-                        //           autoPlayCurve: Curves.fastOutSlowIn,
-                        //           enableInfiniteScroll: true,
-                        //           autoPlayAnimationDuration:
-                        //               Duration(milliseconds: 800),
-                        //           viewportFraction: 0.8,
-                        //           onPageChanged: (index, reason) {
-                        //             setState(() {
-                        //               _currentIndex = index;
-                        //             });
-                        //           },
-                        //         ),
-                        //       ),
-                        //       SizedBox(height: 10),
-                        //       Center(
-                        //         child: AnimatedSmoothIndicator(
-                        //           activeIndex: _currentIndex,
-                        //           count: imageUrls.length,
-                        //           effect: ExpandingDotsEffect(
-                        //             dotHeight: 8,
-                        //             dotWidth: 8,
-                        //             activeDotColor: Colors.blue,
-                        //             dotColor: Colors.grey,
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        SizedBox(
-                          height: 200,
-                          child: ListView(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            children: [
-                              CarouselSlider(
-                                items: controllerAds.allAds.map((image) {
-                                  print(controllerAds.allAds[0].ads);
-                                  return Container(
-                                    margin: EdgeInsets.all(6.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      image: DecorationImage(
-                                        image: NetworkImage(image.ads),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                                options: CarouselOptions(
-                                  height: 180.0,
-                                  enlargeCenterPage: true,
-                                  autoPlay: true,
-                                  aspectRatio: 16 / 9,
-                                  autoPlayCurve: Curves.fastOutSlowIn,
-                                  enableInfiniteScroll: true,
-                                  autoPlayAnimationDuration:
-                                      Duration(milliseconds: 800),
-                                  viewportFraction: 0.8,
-                                  onPageChanged: (index, reason) {
-                                    setState(() {
-                                      _currentIndex = index;
-                                    });
-                                  },
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Center(
-                                child: AnimatedSmoothIndicator(
-                                  activeIndex: _currentIndex,
-                                  count: controllerAds.allAds.length,
-                                  effect: ExpandingDotsEffect(
-                                    dotHeight: 8,
-                                    dotWidth: 8,
-                                    activeDotColor: Colors.blue,
-                                    dotColor: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        Padding(
+                  );
+                }),
+                Spacer(),
+                token != null
+                    ? InkWell(
+                        onTap: () {
+                          logoutDialog_logout(context);
+                        },
+                        child: Padding(
                           padding: const EdgeInsets.all(20),
-                          child: Column(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Image.asset(
+                                Images.DRAWER_7,
+                                height: 23,
+                                width: 23,
+                                color: primaryColor,
+                                // color: isSelected ? Colors.red : Colors.black54,
+                              ),
+                              const SizedBox(width: 20),
                               Text(
-                                'All Product’s',
+                                "Logout",
                                 style: TextStyle(
-                                  fontSize: 24,
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff3C3E89),
+                                  color: Color(0xff3C3D86),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  // color: isSelected ? Colors.red : Colors.black54,
                                 ),
                               ),
-                              SizedBox(
-                                width: 100,
-                                child: Divider(
-                                  color: Color(0xff01B8FA),
-                                  height: 2,
-                                  thickness: 3,
+                            ],
+                          ),
+                        ),
+                      )
+                    : Container(),
+                Divider(
+                  color: Colors.black,
+                  height: 2,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                              children: [
+                                const TextSpan(
+                                  text: 'All Right Reserved By ',
+                                  style: TextStyle(
+                                    color: Color(0xFF3C3C90), // Dark purple-ish
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
-                              )
-                            ],
+                                TextSpan(
+                                  text: 'Design-blitz',
+                                  style: const TextStyle(
+                                    color: Colors
+                                        .lightBlueAccent, // Light blue clickable
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = _launchURL,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Column(
-                            children: [
-                              _buildProductGrid(
-                                  controllerAllProducts.allProducts),
-                            ],
+                        ],
+                      ),
+                      const SizedBox(height: 5),
+                      RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
                           ),
+                          children: [
+                            const TextSpan(
+                              text: 'App Version : 1.0',
+                              style: TextStyle(
+                                color: Color(0xFF3C3C90), // Dark purple-ish
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-        ));
+              ],
+            ),
+          ),
+          body: Obx(
+            () => controllerAllProducts.loading.value
+                ? Center(child: CircularProgressIndicator(color: Colors.red))
+                : SingleChildScrollView(
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 10),
+                          // SizedBox(
+                          //   height: 200,
+                          //   child: ListView(
+                          //     shrinkWrap: true,
+                          //     physics: NeverScrollableScrollPhysics(),
+                          //     children: [
+                          //       CarouselSlider(
+                          //         items: imageUrls.map((imageUrl) {
+                          //           return Container(
+                          //             margin: EdgeInsets.all(6.0),
+                          //             decoration: BoxDecoration(
+                          //               borderRadius: BorderRadius.circular(8.0),
+                          //               image: DecorationImage(
+                          //                 image: NetworkImage(imageUrl),
+                          //                 fit: BoxFit.cover,
+                          //               ),
+                          //             ),
+                          //           );
+                          //         }).toList(),
+                          //         options: CarouselOptions(
+                          //           height: 180.0,
+                          //           enlargeCenterPage: true,
+                          //           autoPlay: true,
+                          //           aspectRatio: 16 / 9,
+                          //           autoPlayCurve: Curves.fastOutSlowIn,
+                          //           enableInfiniteScroll: true,
+                          //           autoPlayAnimationDuration:
+                          //               Duration(milliseconds: 800),
+                          //           viewportFraction: 0.8,
+                          //           onPageChanged: (index, reason) {
+                          //             setState(() {
+                          //               _currentIndex = index;
+                          //             });
+                          //           },
+                          //         ),
+                          //       ),
+                          //       SizedBox(height: 10),
+                          //       Center(
+                          //         child: AnimatedSmoothIndicator(
+                          //           activeIndex: _currentIndex,
+                          //           count: imageUrls.length,
+                          //           effect: ExpandingDotsEffect(
+                          //             dotHeight: 8,
+                          //             dotWidth: 8,
+                          //             activeDotColor: Colors.blue,
+                          //             dotColor: Colors.grey,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                          SizedBox(
+                            height: 200,
+                            child: ListView(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              children: [
+                                CarouselSlider(
+                                  items: controllerAds.allAds.map((image) {
+                                    print(controllerAds.allAds[0].ads);
+                                    return Container(
+                                      margin: EdgeInsets.all(6.0),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        image: DecorationImage(
+                                          image: NetworkImage(image.ads),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  options: CarouselOptions(
+                                    height: 180.0,
+                                    enlargeCenterPage: true,
+                                    autoPlay: true,
+                                    aspectRatio: 16 / 9,
+                                    autoPlayCurve: Curves.fastOutSlowIn,
+                                    enableInfiniteScroll: true,
+                                    autoPlayAnimationDuration:
+                                        Duration(milliseconds: 800),
+                                    viewportFraction: 0.8,
+                                    onPageChanged: (index, reason) {
+                                      setState(() {
+                                        _currentIndex = index;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Center(
+                                  child: AnimatedSmoothIndicator(
+                                    activeIndex: _currentIndex,
+                                    count: controllerAds.allAds.length,
+                                    effect: ExpandingDotsEffect(
+                                      dotHeight: 8,
+                                      dotWidth: 8,
+                                      activeDotColor: Colors.blue,
+                                      dotColor: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'All Product’s',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontStyle: FontStyle.italic,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff3C3E89),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 100,
+                                  child: Divider(
+                                    color: Color(0xff01B8FA),
+                                    height: 2,
+                                    thickness: 3,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Column(
+                              children: [
+                                _buildProductGrid(
+                                    controllerAllProducts.allProducts),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+          )),
+    );
   }
 }
