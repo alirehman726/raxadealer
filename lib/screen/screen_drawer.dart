@@ -11,7 +11,6 @@ import 'package:raxaadmin/Model/ModelAllProducts.dart';
 import 'package:raxaadmin/Widgets/logoutDialog.dart';
 import 'package:raxaadmin/screen/screen_menu_item.dart';
 import 'package:raxaadmin/screen/screen_products_details.dart';
-import 'package:raxaadmin/screen/userPopup.dart';
 import 'package:raxaadmin/utils/color.dart';
 import 'package:raxaadmin/utils/images.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,25 +40,27 @@ class _ScreenDrawerState extends State<ScreenDrawer>
     controllerAds.controllerAds();
 
     loadUserData();
-    dataGet();
+    // dataGet();
     // userModel();
   }
 
   String? cityId;
 
-  Future<void> dataGet() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    cityId = prefs.getString('city_id');
+  // Future<void> dataGet() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   cityId = prefs.getString('city_id');
 
-    if (cityId == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        showDialog(
-          context: context,
-          builder: (context) => UserFormPopup(),
-        );
-      });
-    } else {}
-  }
+  //   // prefs.remove('city_id');
+
+  //   if (cityId == null) {
+  //     WidgetsBinding.instance.addPostFrameCallback((_) {
+  //       showDialog(
+  //         context: context,
+  //         builder: (context) => UserFormPopup(),
+  //       );
+  //     });
+  //   } else {}
+  // }
 
   late List<Map<String, dynamic>> menuItems;
 
