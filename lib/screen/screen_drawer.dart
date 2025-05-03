@@ -17,6 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'userPopup.dart';
+
 class ScreenDrawer extends StatefulWidget {
   @override
   _ScreenDrawerState createState() => _ScreenDrawerState();
@@ -40,27 +42,27 @@ class _ScreenDrawerState extends State<ScreenDrawer>
     controllerAds.controllerAds();
 
     loadUserData();
-    // dataGet();
+    dataGet();
     // userModel();
   }
 
   String? cityId;
 
-  // Future<void> dataGet() async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   cityId = prefs.getString('city_id');
+  Future<void> dataGet() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    cityId = prefs.getString('city_id');
 
-  //   // prefs.remove('city_id');
+    // prefs.remove('city_id');
 
-  //   if (cityId == null) {
-  //     WidgetsBinding.instance.addPostFrameCallback((_) {
-  //       showDialog(
-  //         context: context,
-  //         builder: (context) => UserFormPopup(),
-  //       );
-  //     });
-  //   } else {}
-  // }
+    if (cityId == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          builder: (context) => UserFormPopup(),
+        );
+      });
+    } else {}
+  }
 
   late List<Map<String, dynamic>> menuItems;
 
@@ -89,18 +91,17 @@ class _ScreenDrawerState extends State<ScreenDrawer>
   }
 
   int selectedIndex = 0;
-
   Widget _buildProductGrid(RxList<AllProducts> allProducts) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: GridView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
-          childAspectRatio: 0.8,
+          crossAxisCount: 3,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 16,
+          childAspectRatio: 0.65,
         ),
         itemCount: allProducts.length,
         itemBuilder: (context, index) {
@@ -130,16 +131,15 @@ class _ScreenDrawerState extends State<ScreenDrawer>
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
                     product['image'].toString(),
-                    // 'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
                     fit: BoxFit.cover,
                     width: double.infinity,
-                    height: 120,
+                    height: 100, // reduced for smaller width
                   ),
                 ),
                 Positioned(
-                  bottom: -12,
-                  left: 25,
-                  right: 25,
+                  bottom: -10,
+                  left: 20,
+                  right: 20,
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -152,14 +152,13 @@ class _ScreenDrawerState extends State<ScreenDrawer>
                         ),
                       ],
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     alignment: Alignment.center,
-                    width: 80,
                     child: Text(
                       "₹ ${product['price'].toString()}",
                       style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
                         color: Colors.blue,
                       ),
                     ),
@@ -168,20 +167,118 @@ class _ScreenDrawerState extends State<ScreenDrawer>
               ],
             ),
           ),
-          const SizedBox(height: 20), // Taaki name aur spacing maintain ho
-          Text(
-            product['product_name'].toString(),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: Color(0xff3C3D86),
+          const SizedBox(height: 18),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Text(
+              product['product_name'].toString(),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: Color(0xff3C3D86),
+              ),
             ),
           ),
         ],
       ),
     );
   }
+
+  // Widget _buildProductGrid(RxList<AllProducts> allProducts) {
+  //   return Padding(
+  //     padding: const EdgeInsets.only(left: 20, right: 20),
+  //     child: GridView.builder(
+  //       shrinkWrap: true,
+  //       physics: NeverScrollableScrollPhysics(),
+  //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //         crossAxisCount: 2,
+  //         crossAxisSpacing: 20,
+  //         mainAxisSpacing: 20,
+  //         childAspectRatio: 0.8,
+  //       ),
+  //       itemCount: allProducts.length,
+  //       itemBuilder: (context, index) {
+  //         return _buildProductCard(allProducts[index].toJson());
+  //       },
+  //     ),
+  //   );
+  // }
+
+  // Widget _buildProductCard(product) {
+  //   return Container(
+  //     decoration: BoxDecoration(
+  //       color: Color(0xffccf1fe),
+  //       borderRadius: BorderRadius.circular(12),
+  //     ),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.center,
+  //       children: [
+  //         InkWell(
+  //           onTap: () {
+  //             Get.to(() => ScreenProductsDetails(productsId: product['id']));
+  //           },
+  //           child: Stack(
+  //             clipBehavior: Clip.none,
+  //             children: [
+  //               ClipRRect(
+  //                 borderRadius: BorderRadius.circular(12),
+  //                 child: Image.network(
+  //                   product['image'].toString(),
+  //                   // 'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
+  //                   fit: BoxFit.cover,
+  //                   width: double.infinity,
+  //                   height: 120,
+  //                 ),
+  //               ),
+  //               Positioned(
+  //                 bottom: -12,
+  //                 left: 25,
+  //                 right: 25,
+  //                 child: Container(
+  //                   decoration: BoxDecoration(
+  //                     color: Colors.white,
+  //                     borderRadius: BorderRadius.circular(20),
+  //                     boxShadow: [
+  //                       BoxShadow(
+  //                         color: Colors.black26,
+  //                         blurRadius: 4,
+  //                         spreadRadius: 1,
+  //                       ),
+  //                     ],
+  //                   ),
+  //                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+  //                   alignment: Alignment.center,
+  //                   width: 80,
+  //                   child: Text(
+  //                     "₹ ${product['price'].toString()}",
+  //                     style: TextStyle(
+  //                       fontSize: 11,
+  //                       fontWeight: FontWeight.w500,
+  //                       color: Colors.blue,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         const SizedBox(height: 20), // Taaki name aur spacing maintain ho
+  //         Text(
+  //           product['product_name'].toString(),
+  //           textAlign: TextAlign.center,
+  //           style: TextStyle(
+  //             fontSize: 12,
+  //             fontWeight: FontWeight.bold,
+  //             color: Color(0xff3C3D86),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   void _launchURL() async {
     const url =
@@ -208,7 +305,7 @@ class _ScreenDrawerState extends State<ScreenDrawer>
           backgroundColor: Colors.white,
           appBar: AppBar(
             centerTitle: true,
-            title: Text("Raxa Spread pvt Ltd"),
+            title: Text("Raxa Agarbatti"),
             backgroundColor: Colors.white,
             actions: [
               IconButton(
@@ -308,6 +405,7 @@ class _ScreenDrawerState extends State<ScreenDrawer>
                               onTap: () {
                                 print(menuItems[index]["route"]());
                                 print('Rehmanali');
+                                 Navigator.pop(context);
                                 Get.to(menuItems[index]["route"]());
                               },
                               leading: Image.asset(
@@ -561,7 +659,8 @@ class _ScreenDrawerState extends State<ScreenDrawer>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'All Product’s',
+                                  // 'All Product’s',
+                                  'Hi ${username}',
                                   style: TextStyle(
                                     fontSize: 24,
                                     fontStyle: FontStyle.italic,

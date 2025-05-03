@@ -248,75 +248,291 @@ class _ScreenViewOrderState extends State<ScreenViewOrder> {
                 padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
+                    // Table Header
+                    // Container(
+                    //   color: Color(0xff6f91c2),
+                    //   padding: EdgeInsets.symmetric(vertical: 10),
+                    //   child: Table(
+                    //     columnWidths: {
+                    //       0: FlexColumnWidth(2),
+                    //       1: FlexColumnWidth(1),
+                    //       2: FlexColumnWidth(1),
+                    //     },
+                    //     children: [
+                    //       TableRow(
+                    //         children: [
+                    //           Center(
+                    //             child: Text(
+                    //               "Product",
+                    //               style: TextStyle(
+                    //                 fontWeight: FontWeight.bold,
+                    //                 color: Colors.white,
+                    //                 fontSize: 16,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //           Center(
+                    //             child: Text(
+                    //               "Quantity",
+                    //               style: TextStyle(
+                    //                 fontWeight: FontWeight.bold,
+                    //                 color: Colors.white,
+                    //                 fontSize: 16,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //           Center(
+                    //             child: Text(
+                    //               "Price",
+                    //               style: TextStyle(
+                    //                 fontWeight: FontWeight.bold,
+                    //                 color: Colors.white,
+                    //                 fontSize: 16,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+
+                    // // Table Rows
+                    // Table(
+                    //   columnWidths: {
+                    //     0: FlexColumnWidth(2),
+                    //     1: FlexColumnWidth(1),
+                    //     2: FlexColumnWidth(1),
+                    //   },
+                    //   border: TableBorder.all(color: Colors.grey.shade300),
+                    //   children: List.generate(
+                    //       controllerViewProducts.order.length, (index) {
+                    //     final order = controllerViewProducts.order[index];
+                    //     return TableRow(
+                    //       decoration: BoxDecoration(
+                    //         color: index % 2 == 0
+                    //             ? Colors.lightBlue[50]
+                    //             : Colors.lightBlue[100],
+                    //       ),
+                    //       children: [
+                    //         Padding(
+                    //           padding: EdgeInsets.all(8),
+                    //           child: Text(order.productName),
+                    //         ),
+                    //         Padding(
+                    //           padding: EdgeInsets.all(8),
+                    //           child: Text(order.quantity.toString()),
+                    //         ),
+                    //         Padding(
+                    //           padding: EdgeInsets.all(8),
+                    //           child: Text("₹ ${order.price}"),
+                    //         ),
+                    //       ],
+                    //     );
+                    //   }),
+                    // ),
+
+                    // Header Row
                     Container(
                       color: Color(0xff6f91c2),
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Table(
+                        columnWidths: {
+                          0: FlexColumnWidth(2), // Product
+                          1: FlexColumnWidth(1), // Quantity
+                          2: FlexColumnWidth(1), // Rate
+                          3: FlexColumnWidth(1), // Flavour
+                          4: FlexColumnWidth(1), // Price
+                        },
                         children: [
-                          Text(
-                            "Product",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 16),
-                          ),
-                          Text(
-                            "Quantity",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 16),
-                          ),
-                          Text(
-                            "Price",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 16),
+                          TableRow(
+                            children: [
+                              Center(
+                                child: Text(
+                                  "Product",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              Center(
+                                child: Text(
+                                  "Quantity",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              Center(
+                                child: Text(
+                                  "Rate",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              Center(
+                                child: Text(
+                                  "Flavour",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              Center(
+                                child: Text(
+                                  "Price",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
-                    // Data Rows
-                    SingleChildScrollView(
-                      child: Column(
-                        children: List.generate(
-                            controllerViewProducts.order.length, (index) {
-                          print(controllerViewProducts.viewOrder);
-                          print("controllerViewProducts.viewOrder");
-                          return Container(
+
+// Table Rows
+                    Table(
+                      columnWidths: {
+                        0: FlexColumnWidth(2),
+                        1: FlexColumnWidth(1),
+                        2: FlexColumnWidth(1),
+                        3: FlexColumnWidth(1),
+                        4: FlexColumnWidth(1),
+                      },
+                      border: TableBorder.all(color: Colors.grey.shade300),
+                      children: List.generate(
+                          controllerViewProducts.order.length, (index) {
+                        final order = controllerViewProducts.order[index];
+                        return TableRow(
+                          decoration: BoxDecoration(
                             color: index % 2 == 0
-                                ? Colors.lightBlue[100]
-                                : Colors.lightBlue[300],
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  controllerViewProducts
-                                      .order[index].productName,
-                                  // data[index]["name"]!,
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                                Text(
-                                  controllerViewProducts.order[index].quantity
-                                      .toString(),
-                                  // data[index]["quntity"]!,
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                                Text(
-                                  "₹  ${controllerViewProducts.order[index].price.toString()}",
-                                  // data[index]["sales"]!,
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                              ],
+                                ? Colors.lightBlue[50]
+                                : Colors.lightBlue[100],
+                          ),
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(order.productName),
                             ),
-                          );
-                        }),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(order.quantity.toString()),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                  "₹ ${order.rate.toString()}"), // Assuming you have `rate` field
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child:
+                                  Text(order.flavour ?? "-"), // Optional field
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text("₹ ${order.price}"),
+                            ),
+                          ],
+                        );
+                      }),
+                    ),
+
+                    // Total Price
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "Total: ₹ ${controllerViewProducts.order.fold(0, (sum, item) => sum + item.price)}",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff3C3D86),
+                        ),
                       ),
                     ),
+                    // Container(
+                    //   color: Color(0xff6f91c2),
+                    //   padding: EdgeInsets.all(10),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: [
+                    //       Text(
+                    //         "Product",
+                    //         style: TextStyle(
+                    //             fontWeight: FontWeight.bold,
+                    //             color: Colors.white,
+                    //             fontSize: 16),
+                    //       ),
+                    //       Text(
+                    //         "Quantity",
+                    //         style: TextStyle(
+                    //             fontWeight: FontWeight.bold,
+                    //             color: Colors.white,
+                    //             fontSize: 16),
+                    //       ),
+                    //       Text(
+                    //         "Price",
+                    //         style: TextStyle(
+                    //             fontWeight: FontWeight.bold,
+                    //             color: Colors.white,
+                    //             fontSize: 16),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+
+                    // Data Rows
+                    // SingleChildScrollView(
+                    //   child: Column(
+                    //     children: List.generate(
+                    //         controllerViewProducts.order.length, (index) {
+                    //       print(controllerViewProducts.viewOrder);
+                    //       print("controllerViewProducts.viewOrder");
+                    //       return Container(
+                    //         color: index % 2 == 0
+                    //             ? Colors.lightBlue[100]
+                    //             : Colors.lightBlue[300],
+                    //         padding: EdgeInsets.symmetric(
+                    //             vertical: 10, horizontal: 10),
+                    //         child: Row(
+                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //           children: [
+                    //             Text(
+                    //               controllerViewProducts
+                    //                   .order[index].productName,
+                    //               // data[index]["name"]!,
+                    //               style: TextStyle(fontSize: 14),
+                    //             ),
+                    //             Text(
+                    //               controllerViewProducts.order[index].quantity
+                    //                   .toString(),
+                    //               // data[index]["quntity"]!,
+                    //               style: TextStyle(fontSize: 14),
+                    //             ),
+                    //             Text(
+                    //               "₹  ${controllerViewProducts.order[index].price.toString()}",
+                    //               // data[index]["sales"]!,
+                    //               style: TextStyle(fontSize: 14),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       );
+                    //     }),
+                    //   ),
+                    // ),
 
                     const SizedBox(height: 20),
                     // Row(

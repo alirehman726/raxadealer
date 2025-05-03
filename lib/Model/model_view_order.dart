@@ -75,12 +75,16 @@ class Order {
   String productName;
   int quantity;
   int price;
+  int rate;
+  String flavour;
 
   Order({
     required this.productId,
     required this.productName,
     required this.quantity,
     required this.price,
+    required this.rate,
+    required this.flavour,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
@@ -88,6 +92,8 @@ class Order {
         productName: json["product_name"],
         quantity: json["quantity"],
         price: json["price"],
+        rate: json["rate"],
+        flavour: json["flavour"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -95,5 +101,7 @@ class Order {
         "product_name": productName,
         "quantity": quantity,
         "price": price,
+        "rate": rate,
+        "flavour": flavour,
       };
 }
