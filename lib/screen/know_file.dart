@@ -5,13 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
 import 'package:raxaadmin/Apis/auth_apis.dart';
 import 'package:raxaadmin/Controller/controller_allOrder.dart';
 import 'package:raxaadmin/Controller/controller_view_order.dart';
-import 'package:raxaadmin/Model/model_view_order.dart';
 import 'package:raxaadmin/screen/screen_menu_item.dart';
 import 'package:raxaadmin/screen/screen_order_master.dart';
 import 'package:raxaadmin/utils/images.dart';
@@ -243,17 +239,6 @@ class _ScreenViewOrderState extends State<ScreenViewOrder> {
                             )
                           ],
                         ),
-                        InkWell(
-                          onTap: () {
-                            generateAndDownloadPdf(
-                                controllerViewProducts.order);
-                          },
-                          child: Icon(
-                            Icons.picture_as_pdf_outlined,
-                            color: Colors.black,
-                            size: 30,
-                          ),
-                        )
                       ],
                     ),
                   ],
@@ -264,100 +249,14 @@ class _ScreenViewOrderState extends State<ScreenViewOrder> {
                 child: Column(
                   children: [
                     // Table Header
-                    // Container(
-                    //   color: Color(0xff6f91c2),
-                    //   padding: EdgeInsets.symmetric(vertical: 10),
-                    //   child: Table(
-                    //     columnWidths: {
-                    //       0: FlexColumnWidth(2),
-                    //       1: FlexColumnWidth(1),
-                    //       2: FlexColumnWidth(1),
-                    //     },
-                    //     children: [
-                    //       TableRow(
-                    //         children: [
-                    //           Center(
-                    //             child: Text(
-                    //               "Product",
-                    //               style: TextStyle(
-                    //                 fontWeight: FontWeight.bold,
-                    //                 color: Colors.white,
-                    //                 fontSize: 16,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //           Center(
-                    //             child: Text(
-                    //               "Quantity",
-                    //               style: TextStyle(
-                    //                 fontWeight: FontWeight.bold,
-                    //                 color: Colors.white,
-                    //                 fontSize: 16,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //           Center(
-                    //             child: Text(
-                    //               "Price",
-                    //               style: TextStyle(
-                    //                 fontWeight: FontWeight.bold,
-                    //                 color: Colors.white,
-                    //                 fontSize: 16,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-
-                    // // Table Rows
-                    // Table(
-                    //   columnWidths: {
-                    //     0: FlexColumnWidth(2),
-                    //     1: FlexColumnWidth(1),
-                    //     2: FlexColumnWidth(1),
-                    //   },
-                    //   border: TableBorder.all(color: Colors.grey.shade300),
-                    //   children: List.generate(
-                    //       controllerViewProducts.order.length, (index) {
-                    //     final order = controllerViewProducts.order[index];
-                    //     return TableRow(
-                    //       decoration: BoxDecoration(
-                    //         color: index % 2 == 0
-                    //             ? Colors.lightBlue[50]
-                    //             : Colors.lightBlue[100],
-                    //       ),
-                    //       children: [
-                    //         Padding(
-                    //           padding: EdgeInsets.all(8),
-                    //           child: Text(order.productName),
-                    //         ),
-                    //         Padding(
-                    //           padding: EdgeInsets.all(8),
-                    //           child: Text(order.quantity.toString()),
-                    //         ),
-                    //         Padding(
-                    //           padding: EdgeInsets.all(8),
-                    //           child: Text("₹ ${order.price}"),
-                    //         ),
-                    //       ],
-                    //     );
-                    //   }),
-                    // ),
-
-                    // Header Row
                     Container(
                       color: Color(0xff6f91c2),
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Table(
                         columnWidths: {
-                          0: FlexColumnWidth(2), // Product
-                          1: FlexColumnWidth(1), // Quantity
-                          2: FlexColumnWidth(1), // Rate
-                          3: FlexColumnWidth(1), // Flavour
-                          4: FlexColumnWidth(1), // Price
+                          0: FlexColumnWidth(2),
+                          1: FlexColumnWidth(1),
+                          2: FlexColumnWidth(1),
                         },
                         children: [
                           TableRow(
@@ -384,26 +283,6 @@ class _ScreenViewOrderState extends State<ScreenViewOrder> {
                               ),
                               Center(
                                 child: Text(
-                                  "Rate",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              Center(
-                                child: Text(
-                                  "Flavour",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              Center(
-                                child: Text(
                                   "Price",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -418,14 +297,12 @@ class _ScreenViewOrderState extends State<ScreenViewOrder> {
                       ),
                     ),
 
-// Table Rows
+                    // Table Rows
                     Table(
                       columnWidths: {
                         0: FlexColumnWidth(2),
                         1: FlexColumnWidth(1),
                         2: FlexColumnWidth(1),
-                        3: FlexColumnWidth(1),
-                        4: FlexColumnWidth(1),
                       },
                       border: TableBorder.all(color: Colors.grey.shade300),
                       children: List.generate(
@@ -445,16 +322,6 @@ class _ScreenViewOrderState extends State<ScreenViewOrder> {
                             Padding(
                               padding: EdgeInsets.all(8),
                               child: Text(order.quantity.toString()),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Text(
-                                  "₹ ${order.rate.toString()}"), // Assuming you have `rate` field
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child:
-                                  Text(order.flavour ?? "-"), // Optional field
                             ),
                             Padding(
                               padding: EdgeInsets.all(8),
@@ -874,64 +741,6 @@ class _ScreenViewOrderState extends State<ScreenViewOrder> {
           );
         },
       ),
-    );
-  }
-
-  void generateAndDownloadPdf(List<Order> orders) async {
-    final pdf = pw.Document();
-
-    // Total price calculation
-    // final totalPrice = orders.fold(0, (sum, item) => sum + item.price);
-    final totalPrice = orders.fold(0.0, (sum, item) => sum + item.price);
-
-    pdf.addPage(
-      pw.Page(
-        build: (context) {
-          return pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              pw.Text('Order Summary', style: pw.TextStyle(fontSize: 24)),
-              pw.SizedBox(height: 20),
-              pw.Table.fromTextArray(
-                headers: ['Product', 'Quantity', 'Rate', 'Flavour', 'Price'],
-                data: orders.map((order) {
-                  return [
-                    order.productName,
-                    order.quantity.toString(),
-                    'Rs. ${order.rate}',
-                    order.flavour ?? '-',
-                    'Rs. ${order.price}',
-                  ];
-                }).toList(),
-                headerStyle: pw.TextStyle(
-                  fontWeight: pw.FontWeight.bold,
-                  color: PdfColors.white,
-                ),
-                headerDecoration: pw.BoxDecoration(color: PdfColors.blue600),
-                cellAlignment: pw.Alignment.centerLeft,
-                cellPadding: const pw.EdgeInsets.all(8),
-                border: pw.TableBorder.all(color: PdfColors.grey),
-              ),
-              pw.SizedBox(height: 10),
-              pw.Align(
-                alignment: pw.Alignment.centerRight,
-                child: pw.Text(
-                  "Total: Rs. $totalPrice",
-                  style: pw.TextStyle(
-                      fontSize: 16,
-                      fontWeight: pw.FontWeight.bold,
-                      color: PdfColors.indigo),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-
-    // Trigger download / share
-    await Printing.layoutPdf(
-      onLayout: (PdfPageFormat format) async => pdf.save(),
     );
   }
 }

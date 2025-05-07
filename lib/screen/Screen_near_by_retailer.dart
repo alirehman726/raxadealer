@@ -1,7 +1,6 @@
 import 'dart:convert';
-import 'dart:math';
 import 'dart:io';
-import 'package:flutter/services.dart';
+import 'dart:math';
 
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/gestures.dart';
@@ -11,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:raxaadmin/Apis/auth_apis.dart';
 import 'package:raxaadmin/Controller/controller_retailer.dart';
 import 'package:raxaadmin/Widgets/logoutDialog.dart';
+import 'package:raxaadmin/screen/screen_drawer.dart';
 import 'package:raxaadmin/screen/screen_menu_item.dart';
 import 'package:raxaadmin/utils/color.dart';
 import 'package:raxaadmin/utils/images.dart';
@@ -217,7 +217,8 @@ class _ScreenNearByRetailerState extends State<ScreenNearByRetailer>
     return WillPopScope(
       onWillPop: () async {
         if (Platform.isAndroid) {
-          SystemNavigator.pop();
+          // SystemNavigator.pop();
+          Get.to(() => ScreenDrawer());
         } else if (Platform.isIOS) {
           exit(0);
         }
@@ -333,7 +334,7 @@ class _ScreenNearByRetailerState extends State<ScreenNearByRetailer>
                             onTap: () {
                               print(menuItems[index]["route"]());
                               print('Rehmanali');
-                               Navigator.pop(context);
+                              Navigator.pop(context);
                               Get.to(menuItems[index]["route"]());
                             },
                             leading: Image.asset(
@@ -580,14 +581,14 @@ class _ScreenNearByRetailerState extends State<ScreenNearByRetailer>
                 return Center(
                     child: CircularProgressIndicator(color: Colors.red));
               }
-      
+
               var filteredProducts = controllerAllRetailer.allRetailer
                   .where((dealer) => dealer.name
                       .trim()
                       .toLowerCase()
                       .contains(searchQuery.value.trim()))
                   .toList();
-      
+
               if (filteredProducts.isEmpty) {
                 // ✅ Ensure search results are shown
                 return Center(
@@ -597,7 +598,7 @@ class _ScreenNearByRetailerState extends State<ScreenNearByRetailer>
                   ),
                 );
               }
-      
+
               // if (controllerAllDealer.allDealer.isEmpty) {
               //   return Center(
               //     child: Text(
@@ -613,16 +614,16 @@ class _ScreenNearByRetailerState extends State<ScreenNearByRetailer>
                     borderRadius: BorderRadius.circular(10),
                   ),
                   margin: const EdgeInsets.only(
-                      left: 20, right: 20, top: 10, bottom: 10),
+                      left: 15, right: 15, top: 10, bottom: 10),
                   padding: const EdgeInsets.only(
-                      left: 20, right: 20, top: 10, bottom: 10),
+                      left: 15, right: 15, top: 10, bottom: 10),
                   child: ListView.builder(
                     // itemCount: controllerAllDealer.allDealer.length,
                     itemCount: filteredProducts.length,
-      
+
                     itemBuilder: (context, index) {
                       var dealer = filteredProducts[index];
-      
+
                       return Column(
                         children: [
                           Row(
@@ -673,24 +674,43 @@ class _ScreenNearByRetailerState extends State<ScreenNearByRetailer>
                                         .withOpacity(0.5),
                                     // backgroundColor: fixedColor.withOpacity(
                                     //     0.5), // Fixed color with opacity
+                                    // child: Padding(
+                                    //   padding: const EdgeInsets.all(8),
+                                    //   child: ClipOval(
+                                    //     child: CircleAvatar(
+                                    //       radius: 50,
+                                    //       backgroundColor: getColorFromHex(
+                                    //           controllerAllRetailer
+                                    //               .allRetailer[index]
+                                    //               .colorCode),
+                                    //       // backgroundColor:
+                                    //       //     fixedColor, // Fixed color
+                                    //       child: Text(
+                                    //         getInitials(dealer.name),
+                                    //         // 'AD',
+                                    //         style: TextStyle(
+                                    //           fontSize: 20,
+                                    //           color: Colors.white,
+                                    //           fontWeight: FontWeight.bold,
+                                    //         ),
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    // ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8),
                                       child: ClipOval(
                                         child: CircleAvatar(
-                                          radius: 50,
+                                          radius: 30,
                                           backgroundColor: getColorFromHex(
-                                              controllerAllRetailer
-                                                  .allRetailer[index].colorCode),
-                                          // backgroundColor:
-                                          //     fixedColor, // Fixed color
-                                          child: Text(
-                                            getInitials(dealer.name),
-                                            // 'AD',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                            controllerAllRetailer
+                                                .allRetailer[index].colorCode,
+                                          ),
+                                          child: Image.network(
+                                            dealer.profileImage,
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: double.infinity,
                                           ),
                                         ),
                                       ),
@@ -706,7 +726,8 @@ class _ScreenNearByRetailerState extends State<ScreenNearByRetailer>
                                   child: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       // Text(
                                       //   dealer.name,
@@ -728,7 +749,7 @@ class _ScreenNearByRetailerState extends State<ScreenNearByRetailer>
                                         overflow: TextOverflow
                                             .ellipsis, // 2nd line ke baad "..."
                                       ),
-      
+
                                       Text(
                                         dealer.username,
                                         // dealerData[index]['desc'],

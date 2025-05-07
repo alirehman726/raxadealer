@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/services.dart';
 
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/gestures.dart';
@@ -143,7 +142,8 @@ class _ScreenChangepasswordState extends State<ScreenChangepassword>
     return WillPopScope(
       onWillPop: () async {
         if (Platform.isAndroid) {
-          SystemNavigator.pop();
+          // SystemNavigator.pop();
+          Get.to(() => ScreenDrawer());
         } else if (Platform.isIOS) {
           exit(0);
         }

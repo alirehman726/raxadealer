@@ -1,3 +1,54 @@
+// // // To parse this JSON data, do
+// // //
+// // //     final modelAllAds = modelAllAdsFromJson(jsonString);
+
+// // import 'dart:convert';
+
+// // ModelAllAds modelAllAdsFromJson(String str) =>
+// //     ModelAllAds.fromJson(json.decode(str));
+
+// // String modelAllAdsToJson(ModelAllAds data) => json.encode(data.toJson());
+
+// // class ModelAllAds {
+// //   bool status;
+// //   List<ViewAds> data;
+
+// //   ModelAllAds({
+// //     required this.status,
+// //     required this.data,
+// //   });
+
+// //   factory ModelAllAds.fromJson(Map<String, dynamic> json) => ModelAllAds(
+// //         status: json["status"],
+// //         data: List<ViewAds>.from(json["data"].map((x) => ViewAds.fromJson(x))),
+// //       );
+
+// //   Map<String, dynamic> toJson() => {
+// //         "status": status,
+// //         "data": List<dynamic>.from(data.map((x) => x.toJson())),
+// //       };
+// // }
+
+// // class ViewAds {
+// //   int adsId;
+// //   String image;
+
+// //   ViewAds({
+// //     required this.adsId,
+// //     required this.image,
+// //   });
+
+// //   factory ViewAds.fromJson(Map<String, dynamic> json) => ViewAds(
+// //         adsId: json["ads_id"],
+// //         image: json["image"],
+// //       );
+
+// //   Map<String, dynamic> toJson() => {
+// //         "ads_id": adsId,
+// //         "image": image,
+// //       };
+// // }
+
 // // To parse this JSON data, do
 // //
 // //     final modelAllAds = modelAllAdsFromJson(jsonString);
@@ -12,42 +63,44 @@
 // class ModelAllAds {
 //   bool status;
 //   List<ViewAds> data;
+//   int adsId;
 
 //   ModelAllAds({
 //     required this.status,
 //     required this.data,
+//     required this.adsId,
 //   });
 
 //   factory ModelAllAds.fromJson(Map<String, dynamic> json) => ModelAllAds(
 //         status: json["status"],
 //         data: List<ViewAds>.from(json["data"].map((x) => ViewAds.fromJson(x))),
+//         adsId: json["ads_id"],
 //       );
 
 //   Map<String, dynamic> toJson() => {
 //         "status": status,
 //         "data": List<dynamic>.from(data.map((x) => x.toJson())),
+//         "ads_id": adsId,
 //       };
 // }
 
 // class ViewAds {
-//   int adsId;
-//   String image;
+//   String ads;
 
 //   ViewAds({
-//     required this.adsId,
-//     required this.image,
+//     required this.ads,
 //   });
 
 //   factory ViewAds.fromJson(Map<String, dynamic> json) => ViewAds(
-//         adsId: json["ads_id"],
-//         image: json["image"],
+//         ads: json["ads"],
 //       );
 
 //   Map<String, dynamic> toJson() => {
-//         "ads_id": adsId,
-//         "image": image,
+//         "ads": ads,
 //       };
 // }
+
+
 
 // To parse this JSON data, do
 //
@@ -55,47 +108,38 @@
 
 import 'dart:convert';
 
-ModelAllAds modelAllAdsFromJson(String str) =>
-    ModelAllAds.fromJson(json.decode(str));
+ModelAllAds modelAllAdsFromJson(String str) => ModelAllAds.fromJson(json.decode(str));
 
 String modelAllAdsToJson(ModelAllAds data) => json.encode(data.toJson());
 
 class ModelAllAds {
-  bool status;
-  List<ViewAds> data;
-  int adsId;
+    List<Ad> ads;
 
-  ModelAllAds({
-    required this.status,
-    required this.data,
-    required this.adsId,
-  });
+    ModelAllAds({
+        required this.ads,
+    });
 
-  factory ModelAllAds.fromJson(Map<String, dynamic> json) => ModelAllAds(
-        status: json["status"],
-        data: List<ViewAds>.from(json["data"].map((x) => ViewAds.fromJson(x))),
-        adsId: json["ads_id"],
-      );
+    factory ModelAllAds.fromJson(Map<String, dynamic> json) => ModelAllAds(
+        ads: List<Ad>.from(json["ads"].map((x) => Ad.fromJson(x))),
+    );
 
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-        "ads_id": adsId,
-      };
+    Map<String, dynamic> toJson() => {
+        "ads": List<dynamic>.from(ads.map((x) => x.toJson())),
+    };
 }
 
-class ViewAds {
-  String ads;
+class Ad {
+    String ads;
 
-  ViewAds({
-    required this.ads,
-  });
+    Ad({
+        required this.ads,
+    });
 
-  factory ViewAds.fromJson(Map<String, dynamic> json) => ViewAds(
+    factory Ad.fromJson(Map<String, dynamic> json) => Ad(
         ads: json["ads"],
-      );
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
         "ads": ads,
-      };
+    };
 }

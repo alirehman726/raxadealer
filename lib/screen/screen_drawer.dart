@@ -405,7 +405,7 @@ class _ScreenDrawerState extends State<ScreenDrawer>
                               onTap: () {
                                 print(menuItems[index]["route"]());
                                 print('Rehmanali');
-                                 Navigator.pop(context);
+                                Navigator.pop(context);
                                 Get.to(menuItems[index]["route"]());
                               },
                               leading: Image.asset(

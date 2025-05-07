@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/services.dart';
 import 'dart:math';
 
 import 'package:flutter/gestures.dart';
@@ -8,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:raxaadmin/Controller/controller_allAds.dart';
 import 'package:raxaadmin/Widgets/logoutDialog.dart';
 import 'package:raxaadmin/screen/screen_add_ads.dart';
+import 'package:raxaadmin/screen/screen_drawer.dart';
 import 'package:raxaadmin/screen/screen_menu_item.dart';
 import 'package:raxaadmin/screen/screen_view_ads.dart';
 import 'package:raxaadmin/utils/color.dart';
@@ -83,7 +83,8 @@ class _ScreenAdsState extends State<ScreenAds>
     return WillPopScope(
       onWillPop: () async {
         if (Platform.isAndroid) {
-          SystemNavigator.pop();
+          // SystemNavigator.pop();
+          Get.to(() => ScreenDrawer());
         } else if (Platform.isIOS) {
           exit(0);
         }
@@ -407,10 +408,10 @@ class _ScreenAdsState extends State<ScreenAds>
                           // Get.to(() => ScreenAddDealer());
                           Get.to(
                             () => ScreenAddAds(
-                              id: controllerAllAds.allAds[0].id,
-                              name: controllerAllAds.allAds[0].userName,
-                              date: controllerAllAds.allAds[0].date.toString(),
-                            ),
+                                // id: controllerAllAds.allAds[0].id,
+                                // name: controllerAllAds.allAds[0].userName,
+                                // date: controllerAllAds.allAds[0].date.toString(),
+                                ),
                           );
                         },
                         child: Container(

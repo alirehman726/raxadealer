@@ -10,6 +10,7 @@ import 'package:raxaadmin/Apis/auth_apis.dart';
 import 'package:raxaadmin/Controller/controller_allProducts.dart';
 import 'package:raxaadmin/Controller/controller_allTrackorder.dart';
 import 'package:raxaadmin/Widgets/logoutDialog.dart';
+import 'package:raxaadmin/screen/screen_drawer.dart';
 import 'package:raxaadmin/screen/screen_menu_item.dart';
 import 'package:raxaadmin/screen/screen_trackOrder.dart';
 import 'package:raxaadmin/utils/color.dart';
@@ -202,7 +203,8 @@ class _ScreenProductState extends State<ScreenProduct>
     return WillPopScope(
       onWillPop: () async {
         if (Platform.isAndroid) {
-          SystemNavigator.pop();
+          // SystemNavigator.pop();
+          Get.to(() => ScreenDrawer());
         } else if (Platform.isIOS) {
           exit(0);
         }
@@ -318,7 +320,7 @@ class _ScreenProductState extends State<ScreenProduct>
                             onTap: () {
                               print(menuItems[index]["route"]());
                               print('Rehmanali');
-                               Navigator.pop(context);
+                              Navigator.pop(context);
                               Get.to(menuItems[index]["route"]());
                             },
                             leading: Image.asset(
@@ -496,14 +498,14 @@ class _ScreenProductState extends State<ScreenProduct>
                     child: CircularProgressIndicator(color: Colors.red),
                   );
                 }
-      
+
                 var filteredProducts = controllerAllProducts.allProducts
                     .where((product) => product.productName
                         .trim()
                         .toLowerCase()
                         .contains(searchQuery.value.trim()))
                     .toList();
-      
+
                 if (filteredProducts.isEmpty) {
                   return Center(
                     child: Text(
@@ -512,7 +514,7 @@ class _ScreenProductState extends State<ScreenProduct>
                     ),
                   );
                 }
-      
+
                 return Column(
                   children: [
                     Padding(
@@ -540,18 +542,19 @@ class _ScreenProductState extends State<ScreenProduct>
                               _tableHeader("Amount"),
                             ],
                           ),
-      
+
                           // Product Rows
                           ...List.generate(filteredProducts.length, (rowIndex) {
                             var product = filteredProducts[rowIndex];
                             String productId = product.id.toString();
                             String productName = product.productName ?? '';
-      
+
                             // Initialize maps if not present
                             gadiLoadMap.putIfAbsent(productId, () => '');
                             productNamesMap.putIfAbsent(
                                 productId, () => productName);
-                            productIdsMap.putIfAbsent(productId, () => productId);
+                            productIdsMap.putIfAbsent(
+                                productId, () => productId);
                             return TableRow(
                               children: [
                                 _tableCell(product.productName ?? ''),
@@ -565,7 +568,7 @@ class _ScreenProductState extends State<ScreenProduct>
                                       onChanged: (value) {
                                         setState(() {
                                           gadiLoadMap[productId] = value;
-      
+
                                           double gadiLoad =
                                               double.tryParse(value) ?? 0.0;
                                           double price = double.tryParse(
@@ -573,7 +576,7 @@ class _ScreenProductState extends State<ScreenProduct>
                                                       '0') ??
                                               0.0;
                                           double amount = gadiLoad * price;
-      
+
                                           amountMap[productId] =
                                               amount.toStringAsFixed(2);
                                         });
@@ -592,7 +595,7 @@ class _ScreenProductState extends State<ScreenProduct>
                                 _tableCell(amountMap[productId] ?? '0'),
                               ],
                             );
-      
+
                             // return TableRow(
                             //   children: [
                             //     _tableCell(product.productName ?? ''),
@@ -672,7 +675,7 @@ class _ScreenProductState extends State<ScreenProduct>
                           final filteredEntries = gadiLoadMap.entries
                               .where((entry) => entry.value.trim().isNotEmpty)
                               .toList();
-      
+
                           final filteredInputs =
                               filteredEntries.map((e) => e.value).toList();
                           final filteredProductIds =
@@ -680,11 +683,11 @@ class _ScreenProductState extends State<ScreenProduct>
                           final filteredProductNames = filteredProductIds
                               .map((id) => productNamesMap[id] ?? '')
                               .toList();
-      
+
                           print('User Inputs: $filteredInputs');
                           print('Product Names: $filteredProductNames');
                           print('Product IDs: $filteredProductIds');
-      
+
                           doCallAPILogin(filteredInputs, filteredProductNames,
                               filteredProductIds);
                         }),

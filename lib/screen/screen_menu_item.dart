@@ -1,6 +1,6 @@
 import 'package:raxaadmin/screen/Screen_changePassword.dart';
 import 'package:raxaadmin/screen/Screen_near_by_retailer.dart';
-import 'package:raxaadmin/screen/screen_ads.dart';
+import 'package:raxaadmin/screen/screen_add_ads.dart';
 import 'package:raxaadmin/screen/screen_dealer.dart';
 import 'package:raxaadmin/screen/screen_drawer.dart';
 import 'package:raxaadmin/screen/screen_login.dart';
@@ -56,7 +56,8 @@ Future<List<Map<String, dynamic>>> getMenuItems(String userType) async {
       {
         "icon": Images.DRAWER_4,
         "title": "Add Advertisement",
-        "route": () => ScreenAds(),
+        // "route": () => ScreenAds(),
+        "route": () => ScreenAddAds(),
       },
       {
         "icon": Images.DRAWER_5,

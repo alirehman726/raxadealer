@@ -48,7 +48,8 @@ class _ScreenViewAdsState extends State<ScreenViewAds> {
       user_id = prefs.getString('user_id') ?? '0';
     });
 
-    controllerViewAds.controllerViewAds(widget.id.toString());
+    // controllerViewAds.controllerViewAds(widget.id.toString());
+    controllerViewAds.controllerViewAds();
   }
 
   @override

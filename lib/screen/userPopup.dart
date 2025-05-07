@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:raxaadmin/Apis/auth_apis.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserFormPopup extends StatefulWidget {
@@ -217,10 +220,10 @@ class _UserFormPopupState extends State<UserFormPopup> {
                 );
                 sharedPreferences.setString(
                   "mobile_number  ",
-                  selectedCity!,
+                  mobileController.text,
                 );
 
-                Navigator.pop(context);
+                doCallAPILogin(selectedCity);
 
                 // Optional: Show confirmation
                 // ScaffoldMessenger.of(context).showSnackBar(
@@ -250,5 +253,64 @@ class _UserFormPopupState extends State<UserFormPopup> {
         ],
       ),
     );
+  }
+
+  Future<void> doCallAPILogin(String? selectedCity) async {
+    doStartLoader(true);
+
+    dio.FormData body = dio.FormData.fromMap({
+      "name": _nameController.text.toString(),
+      "phone": mobileController.text.toString(),
+      "city": selectedCity.toString(),
+    });
+    var res = await AuthApis.popupStatusAPI(body);
+
+    if (res != null) {
+      Map<String, dynamic> response = json.decode(res.toString());
+      print(response);
+      print(response['status']);
+      if (response['status'] == true) {
+        Fluttertoast.showToast(
+          msg: response['message'].toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+        Navigator.pop(context);
+      } else {
+        doStartLoader(false);
+        // SnackbarCustom.error("Error", response['message']);
+        Fluttertoast.showToast(
+          msg: response['message'].toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
+    } else {
+      doStartLoader(false);
+      Fluttertoast.showToast(
+        msg: "Something Error ",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+      // SnackbarCustom.error("Error",
+      //     "Unable_to_login_at_the_moment_Please_try_again_after_sometime");
+    }
+  }
+
+  bool isLoading = false;
+
+  doStartLoader(bool val) {
+    setState(() {
+      isLoading = val;
+    });
   }
 }
