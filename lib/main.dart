@@ -6,7 +6,6 @@ import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:raxaadmin/Apis/auth_apis.dart';
 import 'package:raxaadmin/Controller/controller.ads.dart';
@@ -22,7 +21,6 @@ import 'package:raxaadmin/Controller/controller_retailer.dart';
 import 'package:raxaadmin/Controller/controller_viewAds.dart';
 import 'package:raxaadmin/screen/LacaleString.dart';
 import 'package:raxaadmin/screen/screen_drawer.dart';
-import 'package:raxaadmin/screen/screen_login.dart';
 import 'package:raxaadmin/screen/splash_screen.dart';
 import 'package:raxaadmin/utils/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -95,15 +93,6 @@ Future<void> loginFun() async {
       // Get.offAll(() => ScreenLogin());
       Get.offAll(() => ScreenDrawer());
     }
-  } else {
-    Fluttertoast.showToast(
-      msg: "Something went wrong",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb: 1,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
   }
 }
 
