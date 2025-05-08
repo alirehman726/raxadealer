@@ -211,11 +211,15 @@ class _ScreenLoginState extends State<ScreenLogin> {
         print(response);
         print(response['status']);
         if (response['status'] == true) {
+          sharedPreferences.setString("email_id", emailController.text);
+          sharedPreferences.setString("password", passwordController.text);
           sharedPreferences.setString("token", response['token']);
           sharedPreferences.setString("email", response['email']);
           sharedPreferences.setString("username", response['username']);
           sharedPreferences.setString("user_type", response['user_type']);
           sharedPreferences.setString("login_city", response['city_id']);
+          sharedPreferences.setString("user_status", response['user_status']);
+          // "user_status": "1",
           sharedPreferences.setString(
               "user_id", int.parse(response['user_id']).toString());
           Get.to(() => ScreenDrawer());
@@ -267,4 +271,5 @@ class _ScreenLoginState extends State<ScreenLogin> {
       processLoading = val;
     });
   }
+
 }

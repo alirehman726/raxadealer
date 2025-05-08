@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:raxaadmin/Controller/controller_allAds.dart';
 import 'package:raxaadmin/Controller/controller_viewAds.dart';
@@ -104,10 +105,18 @@ class _ScreenAddAdsState extends State<ScreenAddAds> {
                   Navigator.of(context).pop();
                   final picked = await ImagePicker()
                       .pickImage(source: ImageSource.gallery);
+                  // if (picked != null) {
+                  //   setState(() {
+                  //     selectedImages[index] = File(picked.path);
+                  //   });
+                  // }
                   if (picked != null) {
-                    setState(() {
-                      selectedImages[index] = File(picked.path);
-                    });
+                    File? croppedFile = await _cropImage(File(picked.path));
+                    if (croppedFile != null) {
+                      setState(() {
+                        selectedImages[index] = croppedFile;
+                      });
+                    }
                   }
                 },
               ),
@@ -118,10 +127,18 @@ class _ScreenAddAdsState extends State<ScreenAddAds> {
                   Navigator.of(context).pop();
                   final picked =
                       await ImagePicker().pickImage(source: ImageSource.camera);
+                  // if (picked != null) {
+                  //   setState(() {
+                  //     selectedImages[index] = File(picked.path);
+                  //   });
+                  // }
                   if (picked != null) {
-                    setState(() {
-                      selectedImages[index] = File(picked.path);
-                    });
+                    File? croppedFile = await _cropImage(File(picked.path));
+                    if (croppedFile != null) {
+                      setState(() {
+                        selectedImages[index] = croppedFile;
+                      });
+                    }
                   }
                 },
               ),
@@ -131,6 +148,52 @@ class _ScreenAddAdsState extends State<ScreenAddAds> {
       },
     );
   }
+
+  Future<File?> _cropImage(File imageFile) async {
+    final cropped = await ImageCropper().cropImage(
+      sourcePath: imageFile.path,
+      // Optional: Set a fixed aspect ratio if needed
+      // aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Crop Image',
+          toolbarColor: Colors.deepOrange,
+          toolbarWidgetColor: Colors.white,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false,
+        ),
+        IOSUiSettings(
+          title: 'Crop Image',
+        ),
+      ],
+    );
+
+    return cropped != null ? File(cropped.path) : null;
+  }
+
+  // Future<File?> _cropImage(File imageFile) async {
+  //   final cropped = await ImageCropper().cropImage(
+  //     sourcePath: imageFile.path,
+  //     aspectRatioPresets: [
+  //       CropAspectRatioPreset.square,
+  //       CropAspectRatioPreset.ratio4x3,
+  //       CropAspectRatioPreset.original,
+  //     ],
+  //     uiSettings: [
+  //       AndroidUiSettings(
+  //         toolbarTitle: 'Crop Image',
+  //         toolbarColor: Colors.deepOrange,
+  //         toolbarWidgetColor: Colors.white,
+  //       ),
+  //       IOSUiSettings(
+  //         title: 'Crop Image',
+  //       ),
+  //     ],
+  //   );
+
+  //   return cropped != null ? File(cropped.path) : null;
+  // }
 
   @override
   Widget build(BuildContext context) {

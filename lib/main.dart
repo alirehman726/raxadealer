@@ -1,9 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:cron/cron.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:raxaadmin/Apis/auth_apis.dart';
 import 'package:raxaadmin/Controller/controller.ads.dart';
 import 'package:raxaadmin/Controller/controller_AllDealer.dart';
 import 'package:raxaadmin/Controller/controller_EditDealer.dart';
@@ -16,8 +21,11 @@ import 'package:raxaadmin/Controller/controller_dealerReport.dart';
 import 'package:raxaadmin/Controller/controller_retailer.dart';
 import 'package:raxaadmin/Controller/controller_viewAds.dart';
 import 'package:raxaadmin/screen/LacaleString.dart';
+import 'package:raxaadmin/screen/screen_drawer.dart';
+import 'package:raxaadmin/screen/screen_login.dart';
 import 'package:raxaadmin/screen/splash_screen.dart';
 import 'package:raxaadmin/utils/color.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Controller/controller_view_order.dart';
 
@@ -28,7 +36,7 @@ void main() async {
   await ScreenUtil.ensureScreenSize();
   HttpOverrides.global = MyHttpOverrides();
 
-  // Get.put(DashboardController());
+  // All Get.puts
   Get.put(ControllerAllproducts());
   Get.put(ControllerAds());
   Get.put(ControllerOneproducts());
@@ -41,8 +49,142 @@ void main() async {
   Get.put(ControllerDealerreport());
   Get.put(ControllerAllRetailer());
   Get.put(ControllerAllTrack());
+
   runApp(const MyApp());
+
+  // Post app load, setup cron
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    var cron = Cron();
+
+    cron.schedule(Schedule.parse('*/01 * * * *'), () async {
+      // await loginFun();
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      String? token = sharedPreferences.getString('token');
+      try {
+        if (token != null) {
+          await loginFun();
+        }
+      } catch (e) {
+        print("Error in loginFun: $e");
+      }
+      print('cron: login check run');
+      print('every One minutes');
+    });
+  });
 }
+
+Future<void> loginFun() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  print(prefs.getString('token'));
+  print("prefs.getString('token')1111111");
+
+  dio.FormData body = dio.FormData.fromMap({
+    "username": prefs.getString('email_id'),
+    "password": prefs.getString('password'),
+  });
+  var res = await AuthApis.APIlogin(body);
+  if (res != null) {
+    Map<String, dynamic> response = json.decode(res.toString());
+    print(response);
+    print(response['status']);
+    print("false_____________--");
+    if (response['status'] == "false") {
+      print("Rehmanali");
+      prefs.remove("token");
+      // Get.offAll(() => ScreenLogin());
+      Get.offAll(() => ScreenDrawer());
+    }
+  } else {
+    Fluttertoast.showToast(
+      msg: "Something went wrong",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
+}
+
+// void main() async {
+//   Future<void> loginFun() async {
+//     final SharedPreferences prefs = await SharedPreferences.getInstance();
+//     // token = prefs.getString('token');
+//     print(prefs.getString('token'));
+
+//     dio.FormData body = dio.FormData.fromMap({
+//       // "token": appToken,
+//       "username": prefs.getString('email_id'),
+//       "password": prefs.getString('password'),
+//     });
+//     var res = await AuthApis.APIlogin(body);
+//     if (res != null) {
+//       Map<String, dynamic> response = json.decode(res.toString());
+//       print(response);
+//       print(response['status']);
+//       if (response['status'] == true) {
+//         prefs.setString("token", response['token']);
+//         prefs.setString("email", response['email']);
+//         prefs.setString("username", response['username']);
+//         prefs.setString("user_type", response['user_type']);
+//         prefs.setString("login_city", response['city_id']);
+//         prefs.setString("user_status", response['user_status']);
+//         // "user_status": "1",
+//         prefs.setString("user_id", int.parse(response['user_id']).toString());
+//         // Get.to(() => ScreenDrawer());
+//       } else if (response['status'] == false) {
+//         Get.offAll(() => ScreenLogin());
+//       }
+//     } else {
+//       Fluttertoast.showToast(
+//         msg: "Someting went wrong".toString(),
+//         toastLength: Toast.LENGTH_SHORT,
+//         gravity: ToastGravity.CENTER,
+//         timeInSecForIosWeb: 1,
+//         textColor: Colors.white,
+//         fontSize: 16.0,
+//       );
+//     }
+//   }
+
+//   var cron = new Cron();
+
+//   cron.schedule(new Schedule.parse('*/1 * * * *'), () async {
+//     // Get.put(OrderController());
+//     // final controller = Get.find<OrderController>();
+//     // controller.getNewOrder();
+//     loginFun();
+//     print('every One minutes');
+//   });
+//   Future.delayed(const Duration(hours: 24), () async {
+//     final SharedPreferences prefs = await SharedPreferences.getInstance();
+//     // token = prefs.getString('token');
+
+//     // Get.offAll(() => const ScreenLogin());
+//   });
+
+//   WidgetsFlutterBinding.ensureInitialized();
+
+//   // Screen Util Initialize
+//   await ScreenUtil.ensureScreenSize();
+//   HttpOverrides.global = MyHttpOverrides();
+
+//   // Get.put(DashboardController());
+//   Get.put(ControllerAllproducts());
+//   Get.put(ControllerAds());
+//   Get.put(ControllerOneproducts());
+//   Get.put(ControllerAllOrder());
+//   Get.put(ControllerViewOrder());
+//   Get.put(ControllerAllAds());
+//   Get.put(ControllerViewAds());
+//   Get.put(ControllerAllDealer());
+//   Get.put(ControllerEditDealer());
+//   Get.put(ControllerDealerreport());
+//   Get.put(ControllerAllRetailer());
+//   Get.put(ControllerAllTrack());
+//   runApp(const MyApp());
+// }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -73,7 +215,6 @@ class _MyAppState extends State<MyApp> {
               elevation: 0,
             )),
         home: SplashScreen(),
-        // home: ExpandableListView(),
       ),
     );
   }
@@ -85,76 +226,5 @@ class MyHttpOverrides extends HttpOverrides {
     return super.createHttpClient(context)
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
-  }
-}
-
-class ExpandableListView extends StatefulWidget {
-  @override
-  _ExpandableListViewState createState() => _ExpandableListViewState();
-}
-
-class _ExpandableListViewState extends State<ExpandableListView> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Expandable List'),
-      ),
-      body: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (BuildContext context, int index) {
-          return Column(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                  margin: const EdgeInsets.all(5),
-                  padding: const EdgeInsets.all(10),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Color(0xffE2EAF2),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(0),
-                      topRight: Radius.circular(0),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Text('Your Container Content Here'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
-class ExpandedContainer extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      color: Colors.blue,
-      child: Center(
-        child: Text(
-          'Expanded Container',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-    );
   }
 }
