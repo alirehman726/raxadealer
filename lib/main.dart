@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cron/cron.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,19 +23,29 @@ import 'package:raxaadmin/Controller/controller_retailer.dart';
 import 'package:raxaadmin/Controller/controller_viewAds.dart';
 import 'package:raxaadmin/screen/LacaleString.dart';
 import 'package:raxaadmin/screen/screen_drawer.dart';
+import 'package:raxaadmin/screen/screen_view_order.dart';
 import 'package:raxaadmin/screen/splash_screen.dart';
 import 'package:raxaadmin/utils/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Controller/controller_view_order.dart';
 
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  print(message.notification!.title);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   // Screen Util Initialize
   await ScreenUtil.ensureScreenSize();
   HttpOverrides.global = MyHttpOverrides();
+
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
   // All Get.puts
   Get.put(ControllerAllproducts());
@@ -72,6 +83,11 @@ void main() async {
       print('every One minutes');
     });
   });
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Handling a background message: ${message.messageId}");
 }
 
 Future<void> loginFun() async {
@@ -177,6 +193,8 @@ Future<void> loginFun() async {
 //   runApp(const MyApp());
 // }
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -186,12 +204,58 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
+  void initState() {
+    super.initState();
+
+    // For foreground/background message click
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      final data = message.data;
+
+      print('Notification clicked (background/foreground): $data');
+
+      final orderId = data['order_id'];
+      final screen = data['screen'];
+
+      if (screen == "order_view" && orderId != null) {
+        navigatorKey.currentState?.push(
+          MaterialPageRoute(
+            builder: (_) => ScreenViewOrder(id: int.parse(orderId)),
+            // builder: (_) => ScreenViewOrder(id: orderId),
+          ),
+        );
+      }
+    });
+
+    // For terminated state
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null) {
+        final data = message.data;
+
+        print('Notification clicked (terminated): $data');
+
+        final orderId = data['order_id'];
+        final screen = data['screen'];
+
+        if (screen == "order_view" && orderId != null) {
+          navigatorKey.currentState?.push(
+            MaterialPageRoute(
+              builder: (_) => ScreenViewOrder(id: int.parse(orderId)),
+              // builder: (_) => ScreenViewOrder(id: orderId),
+            ),
+          );
+        }
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
     return ScreenUtilInit(
       child: GetMaterialApp(
+        navigatorKey: navigatorKey,
         title: "Raxa Dealer",
         debugShowCheckedModeBanner: false,
         translations: LocaleString(),

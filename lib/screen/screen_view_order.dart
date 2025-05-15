@@ -209,668 +209,670 @@ class _ScreenViewOrderState extends State<ScreenViewOrder> {
               ),
             );
           }
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Track Order Detail :-',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff3C3E89),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 100,
+                                child: Divider(
+                                  color: Color(0xff01B8FA),
+                                  height: 2,
+                                  thickness: 3,
+                                ),
+                              )
+                            ],
+                          ),
+                          InkWell(
+                            onTap: () {
+                              generateAndDownloadPdf(
+                                  controllerViewProducts.order);
+                            },
+                            child: Icon(
+                              Icons.picture_as_pdf_outlined,
+                              color: Colors.black,
+                              size: 30,
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      // Table Header
+                      // Container(
+                      //   color: Color(0xff6f91c2),
+                      //   padding: EdgeInsets.symmetric(vertical: 10),
+                      //   child: Table(
+                      //     columnWidths: {
+                      //       0: FlexColumnWidth(2),
+                      //       1: FlexColumnWidth(1),
+                      //       2: FlexColumnWidth(1),
+                      //     },
+                      //     children: [
+                      //       TableRow(
+                      //         children: [
+                      //           Center(
+                      //             child: Text(
+                      //               "Product",
+                      //               style: TextStyle(
+                      //                 fontWeight: FontWeight.bold,
+                      //                 color: Colors.white,
+                      //                 fontSize: 16,
+                      //               ),
+                      //             ),
+                      //           ),
+                      //           Center(
+                      //             child: Text(
+                      //               "Quantity",
+                      //               style: TextStyle(
+                      //                 fontWeight: FontWeight.bold,
+                      //                 color: Colors.white,
+                      //                 fontSize: 16,
+                      //               ),
+                      //             ),
+                      //           ),
+                      //           Center(
+                      //             child: Text(
+                      //               "Price",
+                      //               style: TextStyle(
+                      //                 fontWeight: FontWeight.bold,
+                      //                 color: Colors.white,
+                      //                 fontSize: 16,
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+            
+                      // // Table Rows
+                      // Table(
+                      //   columnWidths: {
+                      //     0: FlexColumnWidth(2),
+                      //     1: FlexColumnWidth(1),
+                      //     2: FlexColumnWidth(1),
+                      //   },
+                      //   border: TableBorder.all(color: Colors.grey.shade300),
+                      //   children: List.generate(
+                      //       controllerViewProducts.order.length, (index) {
+                      //     final order = controllerViewProducts.order[index];
+                      //     return TableRow(
+                      //       decoration: BoxDecoration(
+                      //         color: index % 2 == 0
+                      //             ? Colors.lightBlue[50]
+                      //             : Colors.lightBlue[100],
+                      //       ),
+                      //       children: [
+                      //         Padding(
+                      //           padding: EdgeInsets.all(8),
+                      //           child: Text(order.productName),
+                      //         ),
+                      //         Padding(
+                      //           padding: EdgeInsets.all(8),
+                      //           child: Text(order.quantity.toString()),
+                      //         ),
+                      //         Padding(
+                      //           padding: EdgeInsets.all(8),
+                      //           child: Text("₹ ${order.price}"),
+                      //         ),
+                      //       ],
+                      //     );
+                      //   }),
+                      // ),
+            
+                      // Header Row
+                      Container(
+                        color: Color(0xff6f91c2),
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Table(
+                          columnWidths: {
+                            0: FlexColumnWidth(2), // Product
+                            1: FlexColumnWidth(1), // Quantity
+                            2: FlexColumnWidth(1), // Rate
+                            3: FlexColumnWidth(1), // Flavour
+                            4: FlexColumnWidth(1), // Price
+                          },
+                          children: [
+                            TableRow(
+                              children: [
+                                Center(
+                                  child: Text(
+                                    "Product",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    "Quantity",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    "Rate",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    "Flavour",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    "Price",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+            
+            // Table Rows
+                      Table(
+                        columnWidths: {
+                          0: FlexColumnWidth(2),
+                          1: FlexColumnWidth(1),
+                          2: FlexColumnWidth(1),
+                          3: FlexColumnWidth(1),
+                          4: FlexColumnWidth(1),
+                        },
+                        border: TableBorder.all(color: Colors.grey.shade300),
+                        children: List.generate(
+                            controllerViewProducts.order.length, (index) {
+                          final order = controllerViewProducts.order[index];
+                          return TableRow(
+                            decoration: BoxDecoration(
+                              color: index % 2 == 0
+                                  ? Colors.lightBlue[50]
+                                  : Colors.lightBlue[100],
+                            ),
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Text(order.productName),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Text(order.quantity.toString()),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Text(
+                                    "₹ ${order.rate.toString()}"), // Assuming you have `rate` field
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8),
+                                child:
+                                    Text(order.flavour ?? "-"), // Optional field
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Text("₹ ${order.price}"),
+                              ),
+                            ],
+                          );
+                        }),
+                      ),
+            
+                      // Total Price
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          "Total: ₹ ${controllerViewProducts.order.fold(0, (sum, item) => sum + item.price)}",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff3C3D86),
+                          ),
+                        ),
+                      ),
+                      // Container(
+                      //   color: Color(0xff6f91c2),
+                      //   padding: EdgeInsets.all(10),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Text(
+                      //         "Product",
+                      //         style: TextStyle(
+                      //             fontWeight: FontWeight.bold,
+                      //             color: Colors.white,
+                      //             fontSize: 16),
+                      //       ),
+                      //       Text(
+                      //         "Quantity",
+                      //         style: TextStyle(
+                      //             fontWeight: FontWeight.bold,
+                      //             color: Colors.white,
+                      //             fontSize: 16),
+                      //       ),
+                      //       Text(
+                      //         "Price",
+                      //         style: TextStyle(
+                      //             fontWeight: FontWeight.bold,
+                      //             color: Colors.white,
+                      //             fontSize: 16),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+            
+                      // Data Rows
+                      // SingleChildScrollView(
+                      //   child: Column(
+                      //     children: List.generate(
+                      //         controllerViewProducts.order.length, (index) {
+                      //       print(controllerViewProducts.viewOrder);
+                      //       print("controllerViewProducts.viewOrder");
+                      //       return Container(
+                      //         color: index % 2 == 0
+                      //             ? Colors.lightBlue[100]
+                      //             : Colors.lightBlue[300],
+                      //         padding: EdgeInsets.symmetric(
+                      //             vertical: 10, horizontal: 10),
+                      //         child: Row(
+                      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //           children: [
+                      //             Text(
+                      //               controllerViewProducts
+                      //                   .order[index].productName,
+                      //               // data[index]["name"]!,
+                      //               style: TextStyle(fontSize: 14),
+                      //             ),
+                      //             Text(
+                      //               controllerViewProducts.order[index].quantity
+                      //                   .toString(),
+                      //               // data[index]["quntity"]!,
+                      //               style: TextStyle(fontSize: 14),
+                      //             ),
+                      //             Text(
+                      //               "₹  ${controllerViewProducts.order[index].price.toString()}",
+                      //               // data[index]["sales"]!,
+                      //               style: TextStyle(fontSize: 14),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       );
+                      //     }),
+                      //   ),
+                      // ),
+            
+                      const SizedBox(height: 20),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     InkWell(
+                      //       onTap: () {
+                      //         // Get.back();
+                      //         Get.dialog(
+                      //           AlertDialog(
+                      //             title: Text('Are You Sure You Want To change'),
+                      //             //content: Text("This should not be closed automatically"),
+                      //             actions: <Widget>[
+                      //               TextButton(
+                      //                 child: Text('Yes'),
+                      //                 onPressed: () async {
+                      //                   doCallAPILogin("approve");
+                      //                 },
+                      //               ),
+                      //               TextButton(
+                      //                 child: Text('No'),
+                      //                 onPressed: () {
+                      //                   Get.back();
+                      //                 },
+                      //               )
+                      //             ],
+                      //           ),
+                      //           barrierDismissible: false,
+                      //         );
+                      //       },
+                      //       child: Container(
+                      //         alignment: Alignment.center,
+                      //         width: 130,
+                      //         padding: EdgeInsets.only(
+                      //             left: 10, right: 10, top: 10, bottom: 10),
+                      //         decoration: BoxDecoration(
+                      //           color: Color(0xff3FCB1C),
+                      //           borderRadius: BorderRadius.circular(7),
+                      //         ),
+                      //         child: Text(
+                      //           'APPROVE',
+                      //           style: TextStyle(
+                      //             fontSize: 10,
+                      //             fontWeight: FontWeight.bold,
+                      //             color: Colors.white,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     InkWell(
+                      //       onTap: () {
+                      //         // Get.back();
+                      //         Get.dialog(
+                      //           AlertDialog(
+                      //             title: Text('Are You Sure You Want To change'),
+                      //             //content: Text("This should not be closed automatically"),
+                      //             actions: <Widget>[
+                      //               TextButton(
+                      //                 child: Text('Yes'),
+                      //                 onPressed: () async {
+                      //                   doCallAPILogin("reject");
+                      //                 },
+                      //               ),
+                      //               TextButton(
+                      //                 child: Text('No'),
+                      //                 onPressed: () {
+                      //                   Get.back();
+                      //                 },
+                      //               )
+                      //             ],
+                      //           ),
+                      //           barrierDismissible: false,
+                      //         );
+                      //       },
+                      //       child: Container(
+                      //         alignment: Alignment.center,
+                      //         width: 130,
+                      //         padding: EdgeInsets.only(
+                      //             left: 10, right: 10, top: 10, bottom: 10),
+                      //         decoration: BoxDecoration(
+                      //           color: Color(0xffFF8800),
+                      //           borderRadius: BorderRadius.circular(7),
+                      //         ),
+                      //         child: Text(
+                      //           'REJECT',
+                      //           style: TextStyle(
+                      //             fontSize: 10,
+                      //             fontWeight: FontWeight.bold,
+                      //             color: Colors.white,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+            
+                      const SizedBox(height: 20),
+            
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Track Order Detail :-',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xff3C3E89),
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Status',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  width: 120,
+                                  height: 40,
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border:
+                                        Border.all(color: Colors.white, width: 2),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    controllerViewProducts.viewOrder[0].status,
+            
+                                    // '03/01/2025',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xff3C3D86),
+                                    ),
+                                  ),
+                                  // child: DropdownButtonHideUnderline(
+                                  //   child: DropdownButton<String>(
+                                  //     value: selectedValue,
+                                  //     items: options.map((String value) {
+                                  //       return DropdownMenuItem<String>(
+                                  //         value: value,
+                                  //         child: Text(
+                                  //           value,
+                                  //           style: TextStyle(
+                                  //               fontSize: 15,
+                                  //               color: Colors.black),
+                                  //         ),
+                                  //       );
+                                  //     }).toList(),
+                                  //     onChanged: (String? newValue) {
+                                  //       setState(() {
+                                  //         selectedValue = newValue!;
+                                  //       });
+                                  //     },
+                                  //     icon: Icon(Icons.arrow_drop_down,
+                                  //         color: Colors.black), // Dropdown arrow
+                                  //     style: TextStyle(color: Colors.black),
+                                  //   ),
+                                  // ),
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              width: 100,
-                              child: Divider(
-                                color: Color(0xff01B8FA),
-                                height: 2,
-                                thickness: 3,
-                              ),
-                            )
+                            //
+                            //
+                            //
+            
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Date',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  width: 120,
+                                  height: 40,
+                                  padding: EdgeInsets.symmetric(horizontal: 5),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border:
+                                        Border.all(color: Colors.white, width: 2),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    DateFormat('MM/dd/yyyy').format(
+                                        controllerViewProducts
+                                            .viewOrder[0].orderDate),
+            
+                                    // '03/01/2025',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xff3C3D86),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            //
+                            //
+                            //
+            
+                            // const SizedBox(height: 10),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: [
+                            //     Text(
+                            //       'Payment ID',
+                            //       style: TextStyle(
+                            //         fontSize: 15,
+                            //         fontWeight: FontWeight.w400,
+                            //         color: Colors.black,
+                            //       ),
+                            //     ),
+                            //     Container(
+                            //       alignment: Alignment.center,
+                            //       width: 120,
+                            //       height: 40,
+                            //       padding: EdgeInsets.symmetric(horizontal: 5),
+                            //       decoration: BoxDecoration(
+                            //         color: Colors.white,
+                            //         border:
+                            //             Border.all(color: Colors.white, width: 2),
+                            //         borderRadius: BorderRadius.circular(10),
+                            //       ),
+                            //       child: Text(
+                            //         controllerViewProducts.viewOrder[0].paymentId
+                            //             .toString(),
+                            //         // 'UTRN NO',
+                            //         style: TextStyle(
+                            //           fontSize: 13,
+                            //           fontWeight: FontWeight.w600,
+                            //           color: Color(0xff3C3D86),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // //
+                            // //
+                            // //
+            
+                            // const SizedBox(height: 10),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: [
+                            //     Text(
+                            //       'Action By',
+                            //       style: TextStyle(
+                            //         fontSize: 15,
+                            //         fontWeight: FontWeight.w400,
+                            //         color: Colors.black,
+                            //       ),
+                            //     ),
+                            //     Container(
+                            //       alignment: Alignment.center,
+                            //       width: 120,
+                            //       height: 40,
+                            //       padding: EdgeInsets.symmetric(horizontal: 5),
+                            //       decoration: BoxDecoration(
+                            //         color: Colors.white,
+                            //         border:
+                            //             Border.all(color: Colors.white, width: 2),
+                            //         borderRadius: BorderRadius.circular(10),
+                            //       ),
+                            //       child: Text(
+                            //         controllerViewProducts.viewOrder[0].paymentId
+                            //             .toString(),
+                            //         // 'RAXADEAL001',
+                            //         style: TextStyle(
+                            //           fontSize: 13,
+                            //           fontWeight: FontWeight.w600,
+                            //           color: Color(0xff3C3D86),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+            
+                            const SizedBox(height: 20),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: [
+                            //     Text(''),
+                            //     InkWell(
+                            //       onTap: () {
+                            //         Get.back();
+                            //       },
+                            //       child: Container(
+                            //         alignment: Alignment.center,
+                            //         width: 130,
+                            //         padding: EdgeInsets.only(
+                            //             left: 10, right: 10, top: 10, bottom: 10),
+                            //         decoration: BoxDecoration(
+                            //           color: Color(0xff67a5fc),
+                            //           borderRadius: BorderRadius.circular(7),
+                            //         ),
+                            //         child: Text(
+                            //           'Submit',
+                            //           style: TextStyle(
+                            //             fontSize: 10,
+                            //             fontWeight: FontWeight.bold,
+                            //             color: Colors.white,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
-                        InkWell(
-                          onTap: () {
-                            generateAndDownloadPdf(
-                                controllerViewProducts.order);
-                          },
-                          child: Icon(
-                            Icons.picture_as_pdf_outlined,
-                            color: Colors.black,
-                            size: 30,
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    // Table Header
-                    // Container(
-                    //   color: Color(0xff6f91c2),
-                    //   padding: EdgeInsets.symmetric(vertical: 10),
-                    //   child: Table(
-                    //     columnWidths: {
-                    //       0: FlexColumnWidth(2),
-                    //       1: FlexColumnWidth(1),
-                    //       2: FlexColumnWidth(1),
-                    //     },
-                    //     children: [
-                    //       TableRow(
-                    //         children: [
-                    //           Center(
-                    //             child: Text(
-                    //               "Product",
-                    //               style: TextStyle(
-                    //                 fontWeight: FontWeight.bold,
-                    //                 color: Colors.white,
-                    //                 fontSize: 16,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //           Center(
-                    //             child: Text(
-                    //               "Quantity",
-                    //               style: TextStyle(
-                    //                 fontWeight: FontWeight.bold,
-                    //                 color: Colors.white,
-                    //                 fontSize: 16,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //           Center(
-                    //             child: Text(
-                    //               "Price",
-                    //               style: TextStyle(
-                    //                 fontWeight: FontWeight.bold,
-                    //                 color: Colors.white,
-                    //                 fontSize: 16,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-
-                    // // Table Rows
-                    // Table(
-                    //   columnWidths: {
-                    //     0: FlexColumnWidth(2),
-                    //     1: FlexColumnWidth(1),
-                    //     2: FlexColumnWidth(1),
-                    //   },
-                    //   border: TableBorder.all(color: Colors.grey.shade300),
-                    //   children: List.generate(
-                    //       controllerViewProducts.order.length, (index) {
-                    //     final order = controllerViewProducts.order[index];
-                    //     return TableRow(
-                    //       decoration: BoxDecoration(
-                    //         color: index % 2 == 0
-                    //             ? Colors.lightBlue[50]
-                    //             : Colors.lightBlue[100],
-                    //       ),
-                    //       children: [
-                    //         Padding(
-                    //           padding: EdgeInsets.all(8),
-                    //           child: Text(order.productName),
-                    //         ),
-                    //         Padding(
-                    //           padding: EdgeInsets.all(8),
-                    //           child: Text(order.quantity.toString()),
-                    //         ),
-                    //         Padding(
-                    //           padding: EdgeInsets.all(8),
-                    //           child: Text("₹ ${order.price}"),
-                    //         ),
-                    //       ],
-                    //     );
-                    //   }),
-                    // ),
-
-                    // Header Row
-                    Container(
-                      color: Color(0xff6f91c2),
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Table(
-                        columnWidths: {
-                          0: FlexColumnWidth(2), // Product
-                          1: FlexColumnWidth(1), // Quantity
-                          2: FlexColumnWidth(1), // Rate
-                          3: FlexColumnWidth(1), // Flavour
-                          4: FlexColumnWidth(1), // Price
-                        },
-                        children: [
-                          TableRow(
-                            children: [
-                              Center(
-                                child: Text(
-                                  "Product",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              Center(
-                                child: Text(
-                                  "Quantity",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              Center(
-                                child: Text(
-                                  "Rate",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              Center(
-                                child: Text(
-                                  "Flavour",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              Center(
-                                child: Text(
-                                  "Price",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-
-// Table Rows
-                    Table(
-                      columnWidths: {
-                        0: FlexColumnWidth(2),
-                        1: FlexColumnWidth(1),
-                        2: FlexColumnWidth(1),
-                        3: FlexColumnWidth(1),
-                        4: FlexColumnWidth(1),
-                      },
-                      border: TableBorder.all(color: Colors.grey.shade300),
-                      children: List.generate(
-                          controllerViewProducts.order.length, (index) {
-                        final order = controllerViewProducts.order[index];
-                        return TableRow(
-                          decoration: BoxDecoration(
-                            color: index % 2 == 0
-                                ? Colors.lightBlue[50]
-                                : Colors.lightBlue[100],
-                          ),
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Text(order.productName),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Text(order.quantity.toString()),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Text(
-                                  "₹ ${order.rate.toString()}"), // Assuming you have `rate` field
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child:
-                                  Text(order.flavour ?? "-"), // Optional field
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Text("₹ ${order.price}"),
-                            ),
-                          ],
-                        );
-                      }),
-                    ),
-
-                    // Total Price
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        "Total: ₹ ${controllerViewProducts.order.fold(0, (sum, item) => sum + item.price)}",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xff3C3D86),
-                        ),
-                      ),
-                    ),
-                    // Container(
-                    //   color: Color(0xff6f91c2),
-                    //   padding: EdgeInsets.all(10),
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //     children: [
-                    //       Text(
-                    //         "Product",
-                    //         style: TextStyle(
-                    //             fontWeight: FontWeight.bold,
-                    //             color: Colors.white,
-                    //             fontSize: 16),
-                    //       ),
-                    //       Text(
-                    //         "Quantity",
-                    //         style: TextStyle(
-                    //             fontWeight: FontWeight.bold,
-                    //             color: Colors.white,
-                    //             fontSize: 16),
-                    //       ),
-                    //       Text(
-                    //         "Price",
-                    //         style: TextStyle(
-                    //             fontWeight: FontWeight.bold,
-                    //             color: Colors.white,
-                    //             fontSize: 16),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-
-                    // Data Rows
-                    // SingleChildScrollView(
-                    //   child: Column(
-                    //     children: List.generate(
-                    //         controllerViewProducts.order.length, (index) {
-                    //       print(controllerViewProducts.viewOrder);
-                    //       print("controllerViewProducts.viewOrder");
-                    //       return Container(
-                    //         color: index % 2 == 0
-                    //             ? Colors.lightBlue[100]
-                    //             : Colors.lightBlue[300],
-                    //         padding: EdgeInsets.symmetric(
-                    //             vertical: 10, horizontal: 10),
-                    //         child: Row(
-                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //           children: [
-                    //             Text(
-                    //               controllerViewProducts
-                    //                   .order[index].productName,
-                    //               // data[index]["name"]!,
-                    //               style: TextStyle(fontSize: 14),
-                    //             ),
-                    //             Text(
-                    //               controllerViewProducts.order[index].quantity
-                    //                   .toString(),
-                    //               // data[index]["quntity"]!,
-                    //               style: TextStyle(fontSize: 14),
-                    //             ),
-                    //             Text(
-                    //               "₹  ${controllerViewProducts.order[index].price.toString()}",
-                    //               // data[index]["sales"]!,
-                    //               style: TextStyle(fontSize: 14),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       );
-                    //     }),
-                    //   ),
-                    // ),
-
-                    const SizedBox(height: 20),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     InkWell(
-                    //       onTap: () {
-                    //         // Get.back();
-                    //         Get.dialog(
-                    //           AlertDialog(
-                    //             title: Text('Are You Sure You Want To change'),
-                    //             //content: Text("This should not be closed automatically"),
-                    //             actions: <Widget>[
-                    //               TextButton(
-                    //                 child: Text('Yes'),
-                    //                 onPressed: () async {
-                    //                   doCallAPILogin("approve");
-                    //                 },
-                    //               ),
-                    //               TextButton(
-                    //                 child: Text('No'),
-                    //                 onPressed: () {
-                    //                   Get.back();
-                    //                 },
-                    //               )
-                    //             ],
-                    //           ),
-                    //           barrierDismissible: false,
-                    //         );
-                    //       },
-                    //       child: Container(
-                    //         alignment: Alignment.center,
-                    //         width: 130,
-                    //         padding: EdgeInsets.only(
-                    //             left: 10, right: 10, top: 10, bottom: 10),
-                    //         decoration: BoxDecoration(
-                    //           color: Color(0xff3FCB1C),
-                    //           borderRadius: BorderRadius.circular(7),
-                    //         ),
-                    //         child: Text(
-                    //           'APPROVE',
-                    //           style: TextStyle(
-                    //             fontSize: 10,
-                    //             fontWeight: FontWeight.bold,
-                    //             color: Colors.white,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     InkWell(
-                    //       onTap: () {
-                    //         // Get.back();
-                    //         Get.dialog(
-                    //           AlertDialog(
-                    //             title: Text('Are You Sure You Want To change'),
-                    //             //content: Text("This should not be closed automatically"),
-                    //             actions: <Widget>[
-                    //               TextButton(
-                    //                 child: Text('Yes'),
-                    //                 onPressed: () async {
-                    //                   doCallAPILogin("reject");
-                    //                 },
-                    //               ),
-                    //               TextButton(
-                    //                 child: Text('No'),
-                    //                 onPressed: () {
-                    //                   Get.back();
-                    //                 },
-                    //               )
-                    //             ],
-                    //           ),
-                    //           barrierDismissible: false,
-                    //         );
-                    //       },
-                    //       child: Container(
-                    //         alignment: Alignment.center,
-                    //         width: 130,
-                    //         padding: EdgeInsets.only(
-                    //             left: 10, right: 10, top: 10, bottom: 10),
-                    //         decoration: BoxDecoration(
-                    //           color: Color(0xffFF8800),
-                    //           borderRadius: BorderRadius.circular(7),
-                    //         ),
-                    //         child: Text(
-                    //           'REJECT',
-                    //           style: TextStyle(
-                    //             fontSize: 10,
-                    //             fontWeight: FontWeight.bold,
-                    //             color: Colors.white,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-
-                    const SizedBox(height: 20),
-
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Status',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.center,
-                                width: 120,
-                                height: 40,
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border:
-                                      Border.all(color: Colors.white, width: 2),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  controllerViewProducts.viewOrder[0].status,
-
-                                  // '03/01/2025',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff3C3D86),
-                                  ),
-                                ),
-                                // child: DropdownButtonHideUnderline(
-                                //   child: DropdownButton<String>(
-                                //     value: selectedValue,
-                                //     items: options.map((String value) {
-                                //       return DropdownMenuItem<String>(
-                                //         value: value,
-                                //         child: Text(
-                                //           value,
-                                //           style: TextStyle(
-                                //               fontSize: 15,
-                                //               color: Colors.black),
-                                //         ),
-                                //       );
-                                //     }).toList(),
-                                //     onChanged: (String? newValue) {
-                                //       setState(() {
-                                //         selectedValue = newValue!;
-                                //       });
-                                //     },
-                                //     icon: Icon(Icons.arrow_drop_down,
-                                //         color: Colors.black), // Dropdown arrow
-                                //     style: TextStyle(color: Colors.black),
-                                //   ),
-                                // ),
-                              ),
-                            ],
-                          ),
-                          //
-                          //
-                          //
-
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Date',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.center,
-                                width: 120,
-                                height: 40,
-                                padding: EdgeInsets.symmetric(horizontal: 5),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border:
-                                      Border.all(color: Colors.white, width: 2),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  DateFormat('MM/dd/yyyy').format(
-                                      controllerViewProducts
-                                          .viewOrder[0].orderDate),
-
-                                  // '03/01/2025',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff3C3D86),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          //
-                          //
-                          //
-
-                          // const SizedBox(height: 10),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text(
-                          //       'Payment ID',
-                          //       style: TextStyle(
-                          //         fontSize: 15,
-                          //         fontWeight: FontWeight.w400,
-                          //         color: Colors.black,
-                          //       ),
-                          //     ),
-                          //     Container(
-                          //       alignment: Alignment.center,
-                          //       width: 120,
-                          //       height: 40,
-                          //       padding: EdgeInsets.symmetric(horizontal: 5),
-                          //       decoration: BoxDecoration(
-                          //         color: Colors.white,
-                          //         border:
-                          //             Border.all(color: Colors.white, width: 2),
-                          //         borderRadius: BorderRadius.circular(10),
-                          //       ),
-                          //       child: Text(
-                          //         controllerViewProducts.viewOrder[0].paymentId
-                          //             .toString(),
-                          //         // 'UTRN NO',
-                          //         style: TextStyle(
-                          //           fontSize: 13,
-                          //           fontWeight: FontWeight.w600,
-                          //           color: Color(0xff3C3D86),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          // //
-                          // //
-                          // //
-
-                          // const SizedBox(height: 10),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text(
-                          //       'Action By',
-                          //       style: TextStyle(
-                          //         fontSize: 15,
-                          //         fontWeight: FontWeight.w400,
-                          //         color: Colors.black,
-                          //       ),
-                          //     ),
-                          //     Container(
-                          //       alignment: Alignment.center,
-                          //       width: 120,
-                          //       height: 40,
-                          //       padding: EdgeInsets.symmetric(horizontal: 5),
-                          //       decoration: BoxDecoration(
-                          //         color: Colors.white,
-                          //         border:
-                          //             Border.all(color: Colors.white, width: 2),
-                          //         borderRadius: BorderRadius.circular(10),
-                          //       ),
-                          //       child: Text(
-                          //         controllerViewProducts.viewOrder[0].paymentId
-                          //             .toString(),
-                          //         // 'RAXADEAL001',
-                          //         style: TextStyle(
-                          //           fontSize: 13,
-                          //           fontWeight: FontWeight.w600,
-                          //           color: Color(0xff3C3D86),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-
-                          const SizedBox(height: 20),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text(''),
-                          //     InkWell(
-                          //       onTap: () {
-                          //         Get.back();
-                          //       },
-                          //       child: Container(
-                          //         alignment: Alignment.center,
-                          //         width: 130,
-                          //         padding: EdgeInsets.only(
-                          //             left: 10, right: 10, top: 10, bottom: 10),
-                          //         decoration: BoxDecoration(
-                          //           color: Color(0xff67a5fc),
-                          //           borderRadius: BorderRadius.circular(7),
-                          //         ),
-                          //         child: Text(
-                          //           'Submit',
-                          //           style: TextStyle(
-                          //             fontSize: 10,
-                          //             fontWeight: FontWeight.bold,
-                          //             color: Colors.white,
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),
