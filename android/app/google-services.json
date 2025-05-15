@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "861069875860",
+    "project_id": "raxa-fa051",
+    "storage_bucket": "raxa-fa051.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861069875860:android:bac4fbc69e955889cb3281",
+        "android_client_info": {
+          "package_name": "com.raxaspread.userapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCt0jsE66x99Boiz4uJ3M0hj56UbRpKQaA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

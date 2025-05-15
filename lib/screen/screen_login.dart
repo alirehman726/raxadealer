@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart' as dio;
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,36 @@ class _ScreenLoginState extends State<ScreenLogin> {
   TextEditingController passwordController = TextEditingController();
   bool processLoading = false;
 
+  String deviceTokenToSendPushNotification = '';
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  void setupFCM() async {
+    // Notification permission (iOS)
+    NotificationSettings settings = await messaging.requestPermission();
+
+    String? token = await messaging.getToken();
+    deviceTokenToSendPushNotification = token.toString();
+    print("Token Value $deviceTokenToSendPushNotification");
+    // Token
+    print("FCM Token: $token");
+
+    // Foreground message listener
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message while in the foreground!');
+      print('Message data: ${message.data}');
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setupFCM();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -202,7 +232,8 @@ class _ScreenLoginState extends State<ScreenLogin> {
       dio.FormData body = dio.FormData.fromMap({
         // "token": appToken,
         "username": emailController.text,
-        "password": passwordController.text
+        "password": passwordController.text,
+        "device_id": deviceTokenToSendPushNotification.toString(),
       });
       var res = await AuthApis.APIlogin(body);
       if (res != null) {
@@ -271,5 +302,4 @@ class _ScreenLoginState extends State<ScreenLogin> {
       processLoading = val;
     });
   }
-
 }

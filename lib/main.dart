@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cron/cron.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,6 +30,7 @@ import 'Controller/controller_view_order.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
   // Screen Util Initialize
   await ScreenUtil.ensureScreenSize();
